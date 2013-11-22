@@ -1,0 +1,105 @@
+\documentclass[10pt,a4paper]{article}
+% Libraries
+\usepackage[utf8]{inputenc} % [utf8] for linux, latin1 for windows
+\usepackage[french]{babel} %\usepackage[english]{babel}
+\usepackage{fullpage}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx} 
+\usepackage{longtable}
+\usepackage{algorithm}
+\usepackage{listings}
+\usepackage{algorithmic}
+\usepackage{float}
+
+\usepackage[center]{caption}
+\usepackage{subcaption}
+
+%\usepackage{calc}
+\usepackage{amsthm}
+%\usepackage[usenames,dvipsnames]{xcolor}
+%\usepackage{tikz}
+%\usepackage[all]{xy}
+
+\usepackage[hidelinks]{hyperref}
+
+\newtheorem{prop}{Proposition}[section]
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{definition}{Definition}[section]
+\newtheorem{requirement}{Requirement}[section]
+\newtheorem{remark}{Remark}[section]
+\newtheorem*{remarks}{Remarks}
+\newtheorem{hypothesis}{Hypothesis}[section]
+\newtheorem{example}{Example}
+
+\setcounter{secnumdepth}{3}
+
+\author{Jean-Baptiste Lespiau}
+\title{System Optimal Dynamic Traffic Assignment with Partial Compliance}
+
+
+%\renewcommand{\thechapter}{\Roman{chapter})}
+%\renewcommand{\thesection}{\Roman{section}} %Alph
+%\renewcommand{\thesubsection}{\arabic{subsection})}
+%\renewcommand{\thesubsubsection}{\alph{subsubsection})}
+%\renewcommand{\theparagraph}{\engrec{paragraph})}
+
+\begin{document}
+
+\begin{abstract}
+Description du rapport
+\end{abstract}
+
+\iffalse
+0) Courte intro: on va parler de quoi ?
+Schema : Meteor: page 374
+L'Atelier B inventé en 92 par Abrial, développé par ??.
+Utilisé dans tels projets (Météor etc)
+Une phrase qui décrit l'idée générale:
+- une méthode pour spécifier, concevoir et implémenter des logiciels
+- une théorie mathématique basée sur les ensembles et les relations
+- un langage
+- un ensemble d'outils autour de l'Atelier B
+1)J-B Théorie des ensembles + théorie des relations (en annexe dans le rapport ?)
+Exemples
+3)[Charles] Explication des machines abstraites et de tous leurs champs
+Définie dans Dossier-Technique page 9
+Exemple de la bibliothèque: Cours B Part I 2007
+4bis) Preuves
+5)[Charles] Raffinement d'une machine abstraite (Dossier Technique page 10)
+Rajouter un exemple (commence page 193 de Spécification avec B)
+5bis) Obligation de preuves des raffinements
+6) Preuves et obligations de preuves
+7)[J-B] Implémentation d'un raffinement (définir ce qu'il doit contenir ou non).
+
+A la fin:
+Les tableaux pour donner les équivalences entre symboles mathématiques et grammaire.
+\fi
+
+\section{Introduction}
+
+\section{Théorie sous-jacente de la méthode B}
+\section{Description de machines abstraites}
+\subsection{Preuve d'invariants}
+
+\section{Raffinement}
+
+\section{Implémentation de modèles}
+
+\appendix
+
+\section{Théorie ZFC}
+
+\subsection{Z}
+\subsection{F}
+\subsection{Théorème du choix}
+
+% ===================================
+% Bib
+\bibliographystyle{plain}
+\bibliography{biblio.bib}
+% ===================================
+
+\end{document}
