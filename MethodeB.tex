@@ -42,6 +42,8 @@
 \author{Jean-Baptiste Lespiau}
 \title{System Optimal Dynamic Traffic Assignment with Partial Compliance}
 
+\newcommand{\Bequal}{\mathrel{\widehat{=}}}
+
 
 %\renewcommand{\thechapter}{\Roman{chapter})}
 %\renewcommand{\thesection}{\Roman{section}} %Alph
@@ -82,9 +84,30 @@ Les tableaux pour donner les équivalences entre symboles mathématiques et gram
 \fi
 
 \section{Introduction}
-Exemple de citation: \cite{behm1999meteor}
+Exemple de citation: 
+\begin{itemize}
+\item Météor \cite{behm1999meteor}
+\item Spécification avec B  \cite{habrias2006specifications}
+\end{itemize}
+
 \section{Théorie sous-jacente de la méthode B}
 \section{Description de machines abstraites}
+% Forcer des espaces du plus petit au plus grand
+% \, \; \: \quad \qquad
+\textbf{MACHINE}
+
+\qquad $registeredP \ \subseteq \ Passenger \wedge registeredB \subseteq Luggage \wedge$
+
+\qquad $registeredP \subseteq Passenger \wedge registeredB \subseteq Luggage \wedge$
+
+\qquad $f \Bequal f$
+
+\textbf{SETS}
+\indent
+\indent
+\indent
+\textbf{CONSTANTS}
+
 \subsection{Preuve d'invariants}
 
 \section{Raffinement}
@@ -99,47 +122,49 @@ La théorie des ensembles de Zermelo est publiée en 1908 et instaure une axioma
 
 En 1922, Fraenkel et Skolem ajoutent des axiomes et le système d'axiomes en résultant est connu sous le nom de théorie de Zermelo-Fraenkel, abrégé en ZF.
 
+On utilise la logique du premier ordre.
+
 \subsection{Théorie de Zermelo (Z)}
 
 \begin{axiom}[Axiome d'extensionnalité] Cet axiome définit l'égalité entre ensemble comme l'égalité de leurs éléments.
 \begin{align}
-\forall A\ \forall B\
+\forall A\ \forall B \
 \left[ 
-\forall x \left( x \in A \Leftrightarrow x \in B  \right) \Rightarrow A = B
+\forall x \left( x \in A \iff x \in B  \right) \Rightarrow A = B
 \right] 
 \end{align}
 \end{axiom}
 
 \begin{axiom}[Axiome de la paire] Cet axiome définit, à partir deux ensemble A et B, un nouvel ensemble paire contenant A et B exactement.
 \begin{align}
-\forall A \ \forall B \ \exists C \ \forall x \ \left[ x \in C \Leftrightarrow \left( x = A \vee x = B \right) \right]
+\forall A \ \forall B \ \exists C \forall x \left[ x \in C \iff \left( x = A \vee x = B \right) \right]
 \end{align}
 \end{axiom}
 
-\begin{axiom}[Axiome de la réunion] Cet axiome définit, à partir d'un ensemble A, un nouvel ensemble $\bigcup A$ contenant les éléments des éléments de A. Avec l'axiome de la paire on peut définir l'union avec $A \cup B = \bigcup {A, B}$.
+\begin{axiom}[Axiome de la réunion] Cet axiome définit, à partir d'un ensemble A, un nouvel ensemble $\bigcup A$ contenant les éléments des éléments de A. Avec l'axiome de la paire on peut définir l'union avec $A \cup B = \bigcup \left\{A, B\right\}$.
 \begin{align}
-\forall A\ \exists B\ \forall C\ \left( C\in B\Leftrightarrow \exists D\ \left( D\in A \wedge C\in D \right) \right)
+\forall A\ \exists B\ \forall C\ \left( C\in B \iff \exists D\ \left( D\in A \wedge C\in D \right) \right)
 \end{align}
 \end{axiom}
 
 
 \begin{axiom}[Schéma d'axiomes de compréhension] Aussi appelé, schéma d'axiomes de séparation, il permet de définir la construction d'ensembles en compréhension. Étant donné un ensemble $A$ et une propriété $\varphi$, il affirme l'existence de l'ensemble B des éléments de A vérifiant la propriété $\varphi$.
 
-Ainsi, pour toute propriété $\varphi$ ne contenant pas d'autre variable libre que $x a_1 \ldots a_p$ on définit l'axiome suivant :
+Ainsi, pour toute propriété $\varphi$ ne contenant pas d'autre variable libre que $x, a_1 \ldots a_p$ on définit l'axiome suivant :
 \begin{align}
-\forall a_1 \ldots a_n \ \forall A \ \exists B \ \forall x \ \left( x \in B \Leftrightarrow \left[ x \in A \wedge \varphi \left(x, a_1, \ldots, a_n \right) \right] \right) 
+\forall a_1 \ldots a_n \ \forall A \ \exists B \ \forall x \ \left( x \in B \iff \left[ x \in A \wedge \varphi \left(x, a_1, \ldots, a_n \right) \right] \right) 
 \end{align}
 \end{axiom}
 
 \begin{axiom}[Axiome de l'infini] Cet axiome définit qu'il existe un ensemble auquel appartient l'ensemble vide et qui est clos par application du successeur$ x \rightarrow x \cup {x}$. Il permet ainsi de construire un ensemble qui contient une représentation des entiers naturels. On note que l'ensemble vide existe comme conséquence de la logique du premier ordre du schéma d'axiomes de compréhension.
 \begin{align}
-\exists A (\emptyset \in A \land \forall x (x \in A \Rightarrow x \cup \{x\} \in A)) 
+\exists A \left( \emptyset \in A \land \forall x (x \in A \Rightarrow x \cup \{x\} \in A) \right) 
 \end{align}
 \end{axiom}
 
 \begin{axiom}[Axiome de l'ensemble des parties] Cet axiome définit que pour tout ensemble $A$ il existe un ensemble auquel appartiennent exactement tous les sous-ensembles de $A$.
 \begin{align}
-\forall A \ \exists P \ \forall B \ [B \in P \iff \forall C \, (C \in B \Rightarrow C \in A)] 
+\forall A \ \exists P \ \forall B \left[B \in P \Leftrightarrow \forall C \left( C \in B \Rightarrow C \in A \right) \right] 
 \end{align}
 \end{axiom}
 
@@ -164,9 +189,9 @@ Ainsi, pour toute propriété $\phi$ ne contenant pas d'autre variable libre que
 
 \subsection{Théorie de Zermelo-Fraenkel avec axiome du choix (ZFC)}
 
-\begin{axiom}[Axiome du choix] Cet axiome définit que pour tout ensemble $A$ il existe un ensemble auquel appartiennent exactement tous les sous-ensembles de $A$.
+\begin{axiom}[Axiome du choix] Étant donné un ensemble X d'ensembles non vides, il existe une fonction définie sur X, appelée fonction de choix, qui à chacun d'entre eux associe un de ses éléments.
 \begin{align}
-\forall A \ \exists P \ \forall B \ [B \in P \iff \forall C \, (C \in B \Rightarrow C \in A)] 
+\forall X \left[ \emptyset \notin X \Rightarrow \exists f: X \rightarrow \bigcup X, \quad \forall A \in X \, ( f(A) \in A ) \right] \,. 
 \end{align}
 \end{axiom}
 
