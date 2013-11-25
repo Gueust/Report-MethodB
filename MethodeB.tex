@@ -8,7 +8,7 @@
 \usepackage{amssymb}
 \usepackage{graphicx} 
 \usepackage{longtable}
-\usepackage{algorithm}
+
 \usepackage{listings}
 \usepackage{algorithmic}
 \usepackage{float}
@@ -23,6 +23,15 @@
 %\usepackage[all]{xy}
 
 \usepackage[hidelinks]{hyperref}
+% To add a word in the links maded by hyperref
+% but cleveref goes "laster" than hyperref
+\usepackage[nameinlink,noabbrev, french]{cleveref}
+
+% Must be after hyperref
+\usepackage{algorithm}
+
+% Pour ordonner les citations etc
+\usepackage{cite}
 
 \newtheorem{prop}{Proposition}[section]
 \newtheorem{theorem}{Theorem}[section]
@@ -54,7 +63,12 @@
 \begin{document}
 
 \begin{abstract}
-Description du rapport
+La méthode B, inventé par Jean-Raymond Abrial, est une méthode pour spécifier, concevoir et générer du code de systèmes logiciels tout en satisfaisant des contraintes de preuves de propriétés.
+Elle est basée sur la théorie des ensembles de Zermelo-Fraenkel avec l'axiome du choix, le concept de substitutions généralisées et une certaine approche de la complexité (par la définition de machine abstraite, raffinement et d'implémentation).
+
+%The concept of refinement is the key notion for developing B models
+%of (software) systems in an incremental way. B models are accompanied by mathematical proofs that %justify
+%them.
 \end{abstract}
 
 \iffalse
@@ -63,10 +77,10 @@ Schema : Meteor: page 374
 L'Atelier B inventé en 92 par Abrial, développé par ??.
 Utilisé dans tels projets (Météor etc)
 Une phrase qui décrit l'idée générale:
-- une méthode pour spécifier, concevoir et implémenter des logiciels
-- une théorie mathématique basée sur les ensembles et les relations
-- un langage
-- un ensemble d'outils autour de l'Atelier B
+\item une théorie mathématique basée sur les ensembles et les relations
+\item une méthode pour spécifier, concevoir et implémenter des logiciels
+\item un langage
+\item un ensemble d'outils autour de l'Atelier B
 1)J-B Théorie des ensembles + théorie des relations (en annexe dans le rapport ?)
 Exemples
 3)[Charles] Explication des machines abstraites et de tous leurs champs
@@ -84,14 +98,78 @@ Les tableaux pour donner les équivalences entre symboles mathématiques et gram
 \fi
 
 \section{Introduction}
-Exemple de citation: 
+
+La méthode B c'est :
 \begin{itemize}
-\item Météor \cite{behm1999meteor}
-\item Spécification avec B  \cite{habrias2006specifications}
+\item une théorie mathématique basée sur la théorie des ensembles et des relations~;
+\item une méthode pour spécifier, concevoir et implémenter des logiciels~;
+\item un langage~;
+\item un ensemble d'outils autour de l'Atelier B (ClearSy).
+\end{itemize}
+~\newline
+
+En particulier, l'Atelier B est constitué de :
+\begin{itemize}
+\item un analyseur~;
+\item un générateur d'obligation de preuve~;
+\item un démonstrateur automatique~;
+\item un démonstrateur interactif~;
+\item un générateur de code C et Ada~;
+\item un gestionnaire de projet.
 \end{itemize}
 
+Le formalisme de modélisation s'appuie sur plusieurs concepts : la théorie des ensembles, la logique des prédicats du premier ordre et le langage de substitutions généralisées.
+
+Pour concevoir ce document, nous nous sommes basés sur \cite{behm1999meteor, habrias2006specifications, theBBook, dossierTechnique}
+
+\subsection{Intérêt de la méthode B}
+\emph{Dans tous les secteurs industriels ont été développées les notions très voisines de SIL (Safety Integrity Level) dans le domaine du transport ferroviaire et de l’industrie, d’ASIL (Automotive Safety Integrity Level ) dans le domaine automobile ou de DAL (Development Assurance Level) dans le domaine aéronautique. Un SIL est lié au niveau de confiance que l'on peut avoir dans un système. Ce niveau de confiance est associé au niveau de qualité du processus de conception/réalisation pour éviter les erreurs systématiques (principalement pour le logiciel ou des circuits intégrés complexes) et est associé à un niveau de probabilité par heure (et par ensemble) d'obtenir une défaillance contraire à la sécurité pour les erreurs aléatoires (principalement pour le matériel).}\cite{dossierTechnique}
+
+\emph{Un processus de conception/réalisation est caractérisé par une organisation, des méthodes, des outils et des techniques spécifiques pour répondre au niveau de confiance exigé. Plus un logiciel est critique, plus on doit disposer d'une organisation robuste et des méthodes et outils qui permettent d'éviter les erreurs ou de les détecter si elles apparaissent malgré tout. Par exemple, dans le secteur ferroviaire, la norme EN50128 précise que pour un logiciel SIL3 et SIL4, les méthodes formelles sont hautement recommandées, et cela a tendance à se généraliser à l'ensemble du monde industriel.}\cite{dossierTechnique}
+
 \section{Théorie sous-jacente de la méthode B}
+
+\subsection{Axiomatique}
+La théorie sous-jacente utilisée provient de la théorie des ensembles de Zermelo-Fraenkel avec axiome du choix (ZFC) dont les axiomes sont présentés en \cref{ZFC}.
+
+
+Cependant, la théorie des ensembles utilisée dans B est une théorie simplifiée dans le sens où certains axiomes ne sont pas utilisés :
+\begin{itemize}
+\item Les deux axiomes de  Fraenkel~;
+\item L'axiome de la réunion.
+\end{itemize}~\newline
+De plus, l'axiome de la paire est modifié pour construire une paire ordonnée et non un ensemble.\newline
+
+Cela donne ainsi l'axiomatique:
+\begin{description}
+\item[Définition de la paire] $(E, F) \in s \times t \Leftrightarrow E \in s \wedge F \in t$
+\item[Ensemble des parties] $s \in \mathbb{P}(t) \Leftrightarrow \forall x (x \in s \Rightarrow x \in t)$
+\item[Ensemble en compréhension] $E \in \{ x | x \in s \wedge P \} \Leftrightarrow (E \in s \wedge [x:= E] P)$
+\item[Égalité d'ensembles] $\forall x (x \in s \Leftrightarrow x \in t) \Rightarrow s = t$
+\item[Axiome du choix] $\exists x  (x \in s) \Rightarrow choice(s) \in s$
+\item[Axiome de l'infini] Existence d'un ensemble infini nommé BIG
+\end{description}
+
+\subsection{Type-checking}
+
+L'idée est que lors de la preuve d'un prédicat ayant des variables liées à des quantificateurs, les variables liées sont supposées appartenir à un ensemble.
+Sans en détailler ici toutes les implications, il est toutefois important de remarquer que l'ajout de ces contraintes de type-checking rend l'ensemble vide typé du type de l'ensemble dont il est le résultat (i.e. $\varnothing = A - A$), et il n'y a donc pas unicité de l'ensemble vide. 
+
 \section{Description de machines abstraites}
+
+Une machine abstraite c'est :
+\begin{itemize}
+\item un état~;
+\item des propriétés invariantes~;
+\item une initialisation~;
+\item des opérations.
+\end{itemize}
+
+\iffalse
+La méthode B introduit un langage rigoureux pour représenter les programmes et leurs propriétés en utilisant le concept de substitution généralisée. Elle utilise la notion simple de machine abstraite qui est assez voisine de la notion d’objet, mais qui, en plus, intègre la notion d'invariant assurant la préservation de propriétés
+des variables d’état de la machine, quelles que soient les opérations appliquées.
+\fi
+
 % Forcer des espaces du plus petit au plus grand
 % \, \; \: \quad \qquad
 \textbf{MACHINE}
@@ -103,26 +181,94 @@ Exemple de citation:
 \qquad $f \Bequal f$
 
 \textbf{SETS}
-\indent
-\indent
-\indent
+
 \textbf{CONSTANTS}
+
 
 \subsection{Preuve d'invariants}
 
+%Les propriétés invariantes sont vérifiées par la dynamique
+%les raffinements préservent la correction totale
+
+Pour prouver une opération dans une machine, il faut que son initialisation établisse l’invariant et que son exécution le conserve. Il faut donc vérifier que l’initialisation et l’opération elle-même respectent la propriété invariante de l’opération. Les invariants sont notés dans la clause INVARIANT de la machine abstraite. 
+
 \section{Raffinement}
 
+\subsection{Raffinement d'une machine abstraite}
+\emph{De manière générale, le raffinement est une technique permettant la transformation d’un modèle abstrait de logiciel (sa spécification) en un autre modèle plus concret (son raffinement). Ce modèle peut contenir à la fois plus de détails par rapport à la spécification et être plus proche de la mise en œuvre (implantation). La technique de raffinement est aussi fondée sur la notion de substitution généralisée.}\cite{dossierTechnique}
+
+\iffalse
+Un raffinement peut utiliser une substitution T si T peut remplacer S sans que « l’utilisateur » de la machine ne s’en aperçoive. Cela signifie que tout ce qui est attendu de S sera rempli par T. On dit
+alors que T est le raffinement de S ou que S est une abstraction de T.
+\fi
+
+Soit R un prédicat de la machine $M$ et $S$ une substitution de $M$ établissant le prédicat $R$: [S]R.
+Une substitution \textbf{$T$ est un raffinement de S} s'il établit aussi R (i.e [T]R .
+
+\emph{Le raffinement est conduit selon trois voies : la suppression des éléments non exécutables du pseudo-code (pré-condition et choix), l’introduction des structures classiques de contrôle de la programmation (séquence et boucle) et la transformation des structures de données mathématiques (ensembles, relations, fonctions,séquences et arbres) en d’autres structures qui permettent d’être programmable (variables simples, booléens, tableaux ou files).}\cite{dossierTechnique}
+
+L’action élémentaire est formalisée au moyen d’une généralisation de la notion de substitution, dite \og substitution généralisée \fg. Parmi ces substitutions généralisées,
+il y a des choix non déterministes laissant la place à des décisions plus tardives qui seront prises dans la phase de raffinement.
+
 \section{Implémentation de modèles}
+
+Le langage $B_0$ est un sous langage de la méthode B qui est directement traduisible en un programme (en ADA, C, C++, etc.).
+L'implémentation est un raffinement d'une machine abstraite appartenant à $B_0$ et pouvant donc être utilisé pour la génération de code.
+
+Voici une liste des principales caractéristiques d'une implémentation :
+\begin{itemize}
+\item Une machine IMPLEMENTATION n’a pas d’état qui lui est propre. Elle n’a pas de clause VARIABLES.
+\item Elle doit importer (IMPORTS d’autres machines dont elle utilise les opérations pour implanter les opérations de la machine quelle implémente (qui est une MACHINE ou un REFINEMENT). 
+\item Elle ne voit (SEES) que les opérations (leur signature)des machines importées. Elle ne voit pas leur variables d’état. Il y a donc un masquage total des “données”. 
+\item Il n’y a plus ni indéterminisme ni substitution parallèle.
+\item Les opérations n’ont plus de précondition. Mais le code est fourni sous l’hyppothèse que l’opération ne sera appelée que “sous sa précondition” (dit autrement, “que si sa précondition est respectée”). Et cela est dit dans la machine abstraite que l’on implante.
+\end{itemize}
+
+Les seules substitutions autorisées sont :
+\begin{itemize}
+\item :=
+\item ; (la composition séquentielle)
+\item IF ...THEN...ELSE...END et variantes
+\item CASE
+\item WHILE ...DO ...INVARIANT...VARIANT...END (la boucle avec l’invariant de boucle et le variant de boucle)
+\item VAR ...IN ...END
+\item Les opérations des machines importées
+\item les opérations d’interrogation des machines vues
+\item Les machines importées sont initialisées selon leur propre clause INITIALISATION, à moins que la machine IMPLEMENTATION ait une clause INITIALISATION.
+\end{itemize}
+\subsection{L'importation de machine par IMPORTS}
+
+Elle a obligatoirement aussi une clause REFINES qui indique quelle machine (MACHINE
+ou REFINEMENT) est implantée. \emph{Le lien IMPORTS entre une impantation MI et une instance de machine importée MA permet de créer l’instance de MA et ainsi de disposer de ses opérations.\cite{habrias2006specifications}}
+Il n'est autorisé que dans une machine IMPLEMENTATION.
+
+On peut en particulier importer des machines de bases ou des bibliothèques fournies avec l’Atelier B et qui fournissent des fonctionnalités. Il s'agit par exemple de BASIC\_IO pour les entrées/sorties usuelles et de L\_ARITHMETIQUE qui offre des opérations arithmétiques (i.e. exponentielle, racine carrée etc).
+
+\section{B événementiel et programme}
+
+\emph{Une machine en B  événementiel, on dit un système, n’a pas des opérations qui seront appelées par d’autres opérations, mais des  événements. Un  événement est spécifié comme une opération gardée. Un événement  est une transition qu’on peut observer.\newline
+\indent Un  événement est déclenché lorsque sa garde est vérifiée. Si plusieurs événements sont déclenchables (i.e. leur garde est vérifiée), le déclenchement est indéterminisme. \newline
+\indent Quand on raffine, alors qu’en B classique on affaiblit les préconditions, en B événementiel, on renforce les gardes. 
+}habrias2006specifications
+
+Preuve à réalisée en B événementiel:
+\begin{itemize}
+\item $Init \Rightarrow I(x)$
+\item $ I(x) \wedge BA(e)(x, x') \Rightarrow I(x')$
+\item $ I(x) \Rightarrow \left( grd(e_1) \vee \ldots grd(e_n) \right)$
+\end{itemize}
+
 
 \appendix
 
 \section{Théorie ZFC}
+\label{ZFC}
+La théorie des ensembles de Zermelo est publiée en 1908 et instaure une axiomatique pour formuler une théorie moderne des ensembles qui n'est pas confrontée aux paradoxes de la théorie de Cantor (par exemple, le paradoxe lié à l'existence d'un ensemble qui contiendrait tous les ensembles).
 
-La théorie des ensembles de Zermelo est publiée en 1908 et instaure une axiomatique pour formuler une théorie moderne des ensembles qui n'est pas confronté aux paradoxes de la théorie de Cantor (par exemple, le paradoxe lié à l'existence d'un ensemble qui contiendrait tous les ensembles).
-
-En 1922, Fraenkel et Skolem ajoutent des axiomes et le système d'axiomes en résultant est connu sous le nom de théorie de Zermelo-Fraenkel, abrégé en ZF.
+En 1922, Fraenkel et Skolem ajoutent des axiomes et le système en résultant est connu sous le nom de théorie de Zermelo-Fraenkel, abrégé en ZF.
 
 On utilise la logique du premier ordre.
+TODO: développer un peu cette logique.
 
 \subsection{Théorie de Zermelo (Z)}
 
@@ -130,20 +276,20 @@ On utilise la logique du premier ordre.
 \begin{align}
 \forall A\ \forall B \
 \left[ 
-\forall x \left( x \in A \iff x \in B  \right) \Rightarrow A = B
+\forall x \left( x \in A \Leftrightarrow x \in B  \right) \Rightarrow A = B
 \right] 
 \end{align}
 \end{axiom}
 
 \begin{axiom}[Axiome de la paire] Cet axiome définit, à partir deux ensemble A et B, un nouvel ensemble paire contenant A et B exactement.
 \begin{align}
-\forall A \ \forall B \ \exists C \forall x \left[ x \in C \iff \left( x = A \vee x = B \right) \right]
+\forall A \ \forall B \ \exists C \forall x \left[ x \in C \Leftrightarrow \left( x = A \vee x = B \right) \right]
 \end{align}
 \end{axiom}
 
 \begin{axiom}[Axiome de la réunion] Cet axiome définit, à partir d'un ensemble A, un nouvel ensemble $\bigcup A$ contenant les éléments des éléments de A. Avec l'axiome de la paire on peut définir l'union avec $A \cup B = \bigcup \left\{A, B\right\}$.
 \begin{align}
-\forall A\ \exists B\ \forall C\ \left( C\in B \iff \exists D\ \left( D\in A \wedge C\in D \right) \right)
+\forall A\ \exists B\ \forall C\ \left( C\in B \Leftrightarrow \exists D\ \left( D\in A \wedge C\in D \right) \right)
 \end{align}
 \end{axiom}
 
@@ -152,11 +298,11 @@ On utilise la logique du premier ordre.
 
 Ainsi, pour toute propriété $\varphi$ ne contenant pas d'autre variable libre que $x, a_1 \ldots a_p$ on définit l'axiome suivant :
 \begin{align}
-\forall a_1 \ldots a_n \ \forall A \ \exists B \ \forall x \ \left( x \in B \iff \left[ x \in A \wedge \varphi \left(x, a_1, \ldots, a_n \right) \right] \right) 
+\forall a_1 \ldots a_n \ \forall A \ \exists B \ \forall x \ \left( x \in B \Leftrightarrow \left[ x \in A \wedge \varphi \left(x, a_1, \ldots, a_n \right) \right] \right) 
 \end{align}
 \end{axiom}
 
-\begin{axiom}[Axiome de l'infini] Cet axiome définit qu'il existe un ensemble auquel appartient l'ensemble vide et qui est clos par application du successeur$ x \rightarrow x \cup {x}$. Il permet ainsi de construire un ensemble qui contient une représentation des entiers naturels. On note que l'ensemble vide existe comme conséquence de la logique du premier ordre du schéma d'axiomes de compréhension.
+\begin{axiom}[Axiome de l'infini] Cet axiome définit qu'il existe un ensemble auquel appartient l'ensemble vide et qui est clos par application du successeur$ x \rightarrow x \cup \{x\}$. Il permet ainsi de construire un ensemble qui contient une représentation des entiers naturels. On note que l'ensemble vide existe comme conséquence de la logique du premier ordre du schéma d'axiomes de compréhension.
 \begin{align}
 \exists A \left( \emptyset \in A \land \forall x (x \in A \Rightarrow x \cup \{x\} \in A) \right) 
 \end{align}
@@ -167,6 +313,13 @@ Ainsi, pour toute propriété $\varphi$ ne contenant pas d'autre variable libre 
 \forall A \ \exists P \ \forall B \left[B \in P \Leftrightarrow \forall C \left( C \in B \Rightarrow C \in A \right) \right] 
 \end{align}
 \end{axiom}
+
+On note ici que l'axiome de l'existence de l'ensemble vide n'est pas mentionné car il peut aussi être introduit à partir de la logique du premier ordre du schéma d'axiomes de compréhension.
+
+Dès qu'il existe un ensemble, l'existence de l'ensemble vide peut être démontrée par compréhension, comme étant le sous-ensemble des éléments de celui-ci qui vérifient une propriété toujours fausse.
+Or, en logique du premier ordre, les domaines d'interprétation des variables d'objets de base, ici des variables d'ensemble, sont non vides, ce qui permet donc de prouver l'existence de l'ensemble vide.
+
+De plus, l'unicité de l'ensemble vidé découle de l'axiome d'extensionnalité.
 
 \subsection{Théorie de Zermelo-Fraenkel (ZF)}
 
