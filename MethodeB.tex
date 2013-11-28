@@ -155,20 +155,58 @@ Cela donne ainsi l'axiomatique:
 L'idée est que lors de la preuve d'un prédicat ayant des variables liées à des quantificateurs, les variables liées sont supposées appartenir à un ensemble.
 Sans en détailler ici toutes les implications, il est toutefois important de remarquer que l'ajout de ces contraintes de type-checking rend l'ensemble vide typé du type de l'ensemble dont il est le résultat (i.e. $\varnothing = A - A$), et il n'y a donc pas unicité de l'ensemble vide. 
 
-\section{Description de machines abstraites}
+\section{Machines abstraites}
+
+\subsection{Description informelle}
+
+La méthode B est fondée sur la notion de \emph{modèle}. Un\emph{modèle}, on le sait, doit pouvoir décrire les \emph{opérations} d'un système, ses données entrantes et sortantes et des valeurs (son \emph{état}) et des propriétés sur ces données et valeurs (des \emph{contraintes} ou \emph{invariants}).
+
+Un utilisateur d'un système qui en connaît un modèle peut fournir des données et valeurs en entrée (i.e. fournir un état du système dans la modélisation actuelle) et observer l'état sortant. Tous ces  éléments (propriétés, données, opérations, état) peuvent être aussi abstraits et généraux que voulu.
+
+L'utilisateur ne connaît rien du fonctionnement interne du système au delà de la précision de son modèle. Ainsi la suite des états internes par lesquels passe la machine lors d'une opération n'est pas accessible à l'utilisateur ayant déclenché l'opération.
+\\
+
+En méthode B, ces notions se traduisent dans une \emph{machine abstraite} : c'est exactement l'appellation en méthode B d'un modèle. Une machine abstraite propose et réalise des opérations (c'est une machine) directement implémentables en code logiciel ou non (elle est abstraite).
+
+Notons, d'un point de vue industriel, qu'une machine abstraite représente un ensemble de besoins, d'exigences ou de spécifications de niveau donné. Nous verrons par la suite comment, de même que l'on précise et concrétise des besoins en exigences puis en spécifications de plus en plus précises et de plus en plus proche de l'implémentation, de même l'on passe de machines abstraites en machines moins abstraites.
+
+\subsection{Description formelle}
 
 Une machine abstraite c'est :
+\\
 \begin{itemize}
-\item un état~;
-\item des propriétés invariantes~;
-\item une initialisation~;
-\item des opérations.
+\item un \textbf{nom}, pour l'appel depuis l'extérieur~;
+\\
+\item des \textbf{paramètres}, dimensionnant la machine~;
+\item des \textbf{contraintes}, sur les paramètres~;
+\\
+\item un \textbf{état}, composé des valeurs d'un ensemble de variables~;
+\item des \textbf{types de données}, potentiellement abstraits, dans lesquels trouver les variables d'état~;
+\item des \textbf{invariants}, propriétés sur l'état décrites en logique 1er ordre/ZFC~;
+\item une \textbf{initialisation}, pour tout ce petit monde~;
+\\
+\item des \textbf{constantes}, valeurs utiles aux opérations, mais non modifiées par elles, et indépendantes de la machine~;
+\item des \textbf{propriétés}, expressions logiques sur les constantes~;
+\\
+\item et enfin des \textbf{opérations}, qui modifient l'état de départ en l'état d'arrivée en conservant les invariants.
 \end{itemize}
-
+\ \\
+Ce qui donne les mots clés de base en langage B, appelés \emph{clauses} :
+\begin{itemize}
+\item \textbf{MACHINE} sous lequel on nomme la machine~;
+\item \textbf{CONSTRAINTS} sous lequel on contraint les paramètres~;
+\item \textbf{VARIABLES} sous lequel on liste les variables constitutant l'état~;
+\item \textbf{INITIALIZATION}, sous lequel on initialise les variables d'état~;
+\item \textbf{INVARIANTS} sous lequel on énonce les invariants sur l'état~;
+\item \textbf{CONSTANTS}, sous lequel on liste les constantes de fonctionnement~;
+\item \textbf{PROPERTIES}, sous lequel on liste les propriétés logiques les constantes~;
+\item \textbf{SETS}, sous lequel on liste les types de données utilisés pour cette machine~;
+\end{itemize}
+\ \\
+Les paramètres sont quant à eux listés entre parenthèse après le nom de la machine. Il existe d'autres clauses, moins importantes pour la définition formelle, qui seront vues lorsque nécessaires, et sont en tous cas dans l'annexe.
 \iffalse
 La méthode B introduit un langage rigoureux pour représenter les programmes et leurs propriétés en utilisant le concept de substitution généralisée. Elle utilise la notion simple de machine abstraite qui est assez voisine de la notion d’objet, mais qui, en plus, intègre la notion d'invariant assurant la préservation de propriétés
 des variables d’état de la machine, quelles que soient les opérations appliquées.
-\fi
 
 % Forcer des espaces du plus petit au plus grand
 % \, \; \: \quad \qquad
@@ -183,6 +221,22 @@ des variables d’état de la machine, quelles que soient les opérations appliq
 \textbf{SETS}
 
 \textbf{CONSTANTS}
+\fi
+
+\subsection Un exemple.
+
+Cet exemple est tiré de TODO \iffalse(manque l'élément bibliographique)\if.
+
+
+\subsubsection Spécification d'un modèle en langage courant
+
+Nous allons modéliser en B une bibliohèque.
+
+Celle-ci gère des livres, des exemplaires de livres, et des abonnés : ce sont les types de données (en plus des types communs, dont les entiers qui nous seront utiles).
+
+Les règles de la bilbiothèque sont les suivantes : un exemplaire est emprunté par au plus un abonné, et un abonné ne peut emprunter plus d'une certaine limite d'exemplaire. Ce sont les invariants de notre bibliothèque.
+
+On peut dans cette bilbiothèque créer des livres ou des exemplaires de livres, et en prêter à des abonnés qui les empruntent. Ce sont nos opérations.
 
 
 \subsection{Preuve d'invariants}
@@ -347,6 +401,16 @@ Ainsi, pour toute propriété $\phi$ ne contenant pas d'autre variable libre que
 \forall X \left[ \emptyset \notin X \Rightarrow \exists f: X \rightarrow \bigcup X, \quad \forall A \in X \, ( f(A) \in A ) \right] \,. 
 \end{align}
 \end{axiom}
+
+\section Compléments syntaxiques du langage B :
+
+\subsection Autres clauses des machines abstraites :
+
+\textbf{ASSERTIONS} : Propriété logique dérivée des invariants, contraintes et propriétés. Étant dérivées, i.e. induites par le reste, il n'est pas nécessaire de les démontrer - et même, elles n'impliquent a priori pas réciproquement le reste. En revanche, elles facilitent le travail du prouveur automatique.
+
+\textbf{DEFINITIONS} : Alias facilitant la rédaction du reste de la machine.
+
+TODO : ABSTRACT_CONSTANTS, CONCRETE_VARIABLES
 
 % ===================================
 % Bib
