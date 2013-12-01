@@ -140,7 +140,7 @@ Pour concevoir ce document, nous nous sommes basés sur \cite{behm1999meteor, ha
 
 \section{Théorie sous-jacente de la méthode B}
 
-La méthode B repose d'abord sur la logique du premier ordre. Une définition formelle des règles de remplacement sont données sur \url{http://www.pps.univ-paris-diderot.fr/~kesner/enseignement/master1/gl/hoare-4.pdf} et sur  \url{http://fr.wikipedia.org/wiki/Logique_de_Hoare}.
+La méthode B repose d'abord sur la logique du premier ordre. Une définition formelle des règles de remplacement sont données sur \url{http://www.labri.fr/perso/retore/GeoLog/mementoFOL.pdf} par exemple.
 
 \subsection{Axiomatique ensembliste}
 
@@ -294,6 +294,7 @@ Voici une liste des principales caractéristiques d'une implémentation :
 \item Les opérations n’ont plus de précondition. Mais le code est fourni sous l’hyppothèse que l’opération ne sera appelée que “sous sa précondition” (dit autrement, “que si sa précondition est respectée”). Et cela est dit dans la machine abstraite que l’on implante.
 \end{itemize}
 
+Il faut que les substitutions soient exécutables et les expressions et prédicats évaluables.
 Les seules substitutions autorisées sont :
 \begin{itemize}
 \item :=
@@ -424,7 +425,7 @@ Ainsi, pour toute propriété $\phi$ ne contenant pas d'autre variable libre que
 
 Un triplet $ \{P\}\;C\;\{Q\} $ est à interpréter dans la logique de Hoare de la façon suivante : si la propriété $P$ est vraie et qu'on exécute le code $C$, alors si $C$ termine on a la propriété $Q$. En particulier, si on n'a pas de garantie sur la terminaison de l'instruction $C$ on parle de correction partielle. La propriété $P$ est appelée précondition et $Q$ postcondition.
 
-Les règles d'inférences de Hoare permettent la construction de programmes devant être appelés avec certaines préconditions et garantissant certaines postconditions.
+Les règles d'inférences de Hoare\footnote{Une partie de ces règles proviennent de \url{http://www.pps.univ-paris-diderot.fr/~kesner/enseignement/master1/gl/hoare-4.pdf}.} permettent la construction de programmes devant être appelés avec certaines préconditions et garantissant certaines postconditions.
 
 \begin{axiom}[Règle de la conditionnelle]
 On note $ P[E/x]$ l'expression $P$ dans laquelle les occurrences libres de la variable $x$ ont été remplacées par l'expression $E$.
