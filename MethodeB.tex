@@ -115,7 +115,7 @@ La méthode B c'est :
 \item une théorie mathématique basée sur la théorie des ensembles et des relations~;
 \item une méthode pour spécifier, concevoir et implémenter des logiciels~;
 \item un langage~;
-\item un ensemble d'outils autour de l'Atelier B (développé par la société ClearSy\footnote{Voir \url{http://www.methode-b.com/}}).
+\item un ensemble d'outils dont le principal est l'Atelier B\footnote{\url{http://www.methode-b.com/}} (développé par la société ClearSy). Il existe également d'autres produits comme B-Toolkit ainsi que des logiciels libres mais bien moins aboutis (comme B4free\footnote{\url{http://www.b4free.com/}} ou ABTools\footnote{\url{http://sourceforge.net/projects/abtools/}}).
 \end{itemize}
 ~
 
@@ -131,12 +131,7 @@ En particulier, l'Atelier B est entre autres constitué de :
 
 Le formalisme de modélisation s'appuie sur plusieurs concepts : la théorie des ensembles, la logique des prédicats du premier ordre et le langage de substitutions généralisées.
 
-Pour concevoir ce document, nous nous sommes basés sur \cite{behm1999meteor, habrias2006specifications, theBBook, dossierTechnique}
-
-\subsection{Intérêt de la méthode B}
-\emph{Dans tous les secteurs industriels ont été développées les notions très voisines de SIL (Safety Integrity Level) dans le domaine du transport ferroviaire et de l’industrie, d’ASIL (Automotive Safety Integrity Level ) dans le domaine automobile ou de DAL (Development Assurance Level) dans le domaine aéronautique. Un SIL est lié au niveau de confiance que l'on peut avoir dans un système. Ce niveau de confiance est associé au niveau de qualité du processus de conception/réalisation pour éviter les erreurs systématiques (principalement pour le logiciel ou des circuits intégrés complexes) et est associé à un niveau de probabilité par heure (et par ensemble) d'obtenir une défaillance contraire à la sécurité pour les erreurs aléatoires (principalement pour le matériel).}\cite{dossierTechnique}
-
-\emph{Un processus de conception/réalisation est caractérisé par une organisation, des méthodes, des outils et des techniques spécifiques pour répondre au niveau de confiance exigé. Plus un logiciel est critique, plus on doit disposer d'une organisation robuste et des méthodes et outils qui permettent d'éviter les erreurs ou de les détecter si elles apparaissent malgré tout. Par exemple, dans le secteur ferroviaire, la norme EN50128 précise que pour un logiciel SIL3 et SIL4, les méthodes formelles sont hautement recommandées, et cela a tendance à se généraliser à l'ensemble du monde industriel.}\cite{dossierTechnique}
+Pour concevoir ce document, nous nous sommes basés sur \cite{behm1999meteor, habrias2006specifications, theBBook, dossierTechnique, VerimagPDF}
 
 \section{Théorie sous-jacente de la méthode B}
 
@@ -328,6 +323,30 @@ Preuve à réalisée en B événementiel:
 \item $ I(x) \wedge BA(e)(x, x') \Rightarrow I(x')$
 \item $ I(x) \Rightarrow \left( grd(e_1) \vee \ldots grd(e_n) \right)$
 \end{itemize}
+
+
+
+\section{Nécessité de tests fonctionnels}
+
+La méthode B ne garantit que ce la conformité entre l'implémentation vis-à-vis de la spécification formelle de départ et ne peut pas garantir que la spécification de départ est correcte ou qu'il n'y a pas eu des erreurs d'interprétation qui ont conduit à des erreurs dans la spécification formelle.
+
+Les tests fonctionnels sont ainsi indispensables pour passer des scénarios issus directement de la spécification textuelle (pour se garantir des erreurs d'interprétation lors du passage à la spécification formelle) ainsi que des scénarios à appliquer qui vont en principe bien au-delà de la spécification afin de se garantir d'erreurs au niveau de la spécification textuelle.
+
+\section{Exemples d'utilisation de la méthode B}
+
+\emph{La première application réellement industrielle a été la ligne METEOR (ligne 14) du métro parisien mise en service en octobre 1998. D'autres lignes de métro ont suivi un peu partout dans le monde. Pour fixer les idées, l'un des logiciels critiques d'un des systèmes de transport a nécessité 40 000 lignes B, 160 000 lignes de code ADA, environ 44 000 obligations de preuve B dont 1 300 ont eu besoin d'une démonstration interactive (non automatique) et une centaine de règles ajoutées.}\cite{dossierTechnique}
+
+\subsection{Diffusion de la méthode B}
+\emph{Dans tous les secteurs industriels ont été développées les notions très voisines de SIL (Safety Integrity Level) dans le domaine du transport ferroviaire et de l’industrie, d’ASIL (Automotive Safety Integrity Level ) dans le domaine automobile ou de DAL (Development Assurance Level) dans le domaine aéronautique. Un SIL est lié au niveau de confiance que l'on peut avoir dans un système. Ce niveau de confiance est associé au niveau de qualité du processus de conception/réalisation pour éviter les erreurs systématiques (principalement pour le logiciel ou des circuits intégrés complexes) et est associé à un niveau de probabilité par heure (et par ensemble) d'obtenir une défaillance contraire à la sécurité pour les erreurs aléatoires (principalement pour le matériel).}\cite{dossierTechnique}
+
+\emph{Un processus de conception/réalisation est caractérisé par une organisation, des méthodes, des outils et des techniques spécifiques pour répondre au niveau de confiance exigé. Plus un logiciel est critique, plus on doit disposer d'une organisation robuste et des méthodes et outils qui permettent d'éviter les erreurs ou de les détecter si elles apparaissent malgré tout. Par exemple, dans le secteur ferroviaire, la norme EN50128 précise que pour un logiciel SIL3 et SIL4, les méthodes formelles sont hautement recommandées, et cela a tendance à se généraliser à l'ensemble du monde industriel.}\cite{dossierTechnique}
+
+La \cref{UtilisationB} présente la diffusion de la méthode B pour les systèmes logiciels SIL4.
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.23]{ressources/carte-monde-projets-b.jpg}
+\caption{\label{UtilisationB}Diffusion de la méthode B. Image provenant de \url{http://www.methode-b.com/methode-formelle}}
+\end{figure}
 
 
 \appendix
