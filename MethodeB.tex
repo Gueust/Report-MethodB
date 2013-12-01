@@ -51,7 +51,7 @@
 \newtheorem{hypothesis}{Hypothesis}[section]
 \newtheorem{example}{Example}
 
-\newtheorem{axiom}{Axiome}
+\newtheorem{axiom}{Axiome}[section]
 \renewcommand{\theaxiom}{\Roman{axiom}} %\renewcommand{\theaxiom}{\thechapter.\thesection.\arabic{axiom}}
 
 \setcounter{secnumdepth}{3}
@@ -83,20 +83,16 @@
 
 \begin{abstract}
 La méthode B, inventé par Jean-Raymond Abrial, est une méthode pour spécifier, concevoir et générer du code de systèmes logiciels tout en satisfaisant des contraintes de preuves de propriétés.
-Elle est basée sur la théorie des ensembles de Zermelo-Fraenkel avec l'axiome du choix, le concept de substitutions généralisées et une certaine approche de la complexité (par la définition de machine abstraite, raffinement et d'implémentation).
+Elle est basée sur la logique du premier ordre, la théorie des ensembles de Zermelo-Fraenkel avec l'axiome du choix, le concept de substitutions généralisées et une certaine approche de la complexité (par la définition de machine abstraite, raffinement et d'implémentation).
 \end{abstract}
 
 \iffalse
 0) Courte intro: on va parler de quoi ?
 Schema : Meteor: page 374
-L'Atelier B inventé en 92 par Abrial, développé par ??.
 Utilisé dans tels projets (Météor etc)
-Une phrase qui décrit l'idée générale:
-\item une théorie mathématique basée sur les ensembles et les relations
-\item une méthode pour spécifier, concevoir et implémenter des logiciels
-\item un langage
-\item un ensemble d'outils autour de l'Atelier B
-1)J-B Théorie des ensembles + théorie des relations (en annexe dans le rapport ?)
+
+1)[J-B] Théorie des ensembles : OK
++ théorie des relations
 Exemples
 3)[Charles] Explication des machines abstraites et de tous leurs champs
 Définie dans Dossier-Technique page 9
@@ -119,18 +115,18 @@ La méthode B c'est :
 \item une théorie mathématique basée sur la théorie des ensembles et des relations~;
 \item une méthode pour spécifier, concevoir et implémenter des logiciels~;
 \item un langage~;
-\item un ensemble d'outils autour de l'Atelier B (ClearSy).
+\item un ensemble d'outils autour de l'Atelier B (développé par la société ClearSy\footnote{Voir \url{http://www.methode-b.com/}}).
 \end{itemize}
-~\newline
+~
 
-En particulier, l'Atelier B est constitué de :
+En particulier, l'Atelier B est entre autres constitué de :
 \begin{itemize}
 \item un analyseur~;
 \item un générateur d'obligation de preuve~;
 \item un démonstrateur automatique~;
 \item un démonstrateur interactif~;
 \item un générateur de code C et Ada~;
-\item un gestionnaire de projet.
+\item un gestionnaire de projet...
 \end{itemize}
 
 Le formalisme de modélisation s'appuie sur plusieurs concepts : la théorie des ensembles, la logique des prédicats du premier ordre et le langage de substitutions généralisées.
@@ -144,16 +140,17 @@ Pour concevoir ce document, nous nous sommes basés sur \cite{behm1999meteor, ha
 
 \section{Théorie sous-jacente de la méthode B}
 
-\subsection{Axiomatique}
+La méthode B repose d'abord sur la logique du premier ordre. Une définition formelle des règles de remplacement sont données sur \url{http://www.pps.univ-paris-diderot.fr/~kesner/enseignement/master1/gl/hoare-4.pdf} et sur  \url{http://fr.wikipedia.org/wiki/Logique_de_Hoare}.
+
+\subsection{Axiomatique ensembliste}
+
 La théorie sous-jacente utilisée provient de la théorie des ensembles de Zermelo-Fraenkel avec axiome du choix (ZFC) dont les axiomes sont présentés en \cref{ZFC}.
-
-
 Cependant, la théorie des ensembles utilisée dans B est une théorie simplifiée dans le sens où certains axiomes ne sont pas utilisés :
 \begin{itemize}
 \item Les deux axiomes de  Fraenkel~;
 \item L'axiome de la réunion.
-\end{itemize}~\newline
-De plus, l'axiome de la paire est modifié pour construire une paire ordonnée et non un ensemble.\newline
+\end{itemize}~
+De plus, l'axiome de la paire est modifié pour construire une paire ordonnée et non un ensemble. 
 
 Cela donne ainsi l'axiomatique:
 \begin{description}
@@ -170,11 +167,15 @@ Cela donne ainsi l'axiomatique:
 L'idée est que lors de la preuve d'un prédicat ayant des variables liées à des quantificateurs, les variables liées sont supposées appartenir à un ensemble.
 Sans en détailler ici toutes les implications, il est toutefois important de remarquer que l'ajout de ces contraintes de type-checking rend l'ensemble vide typé du type de l'ensemble dont il est le résultat (i.e. $\varnothing = A - A$), et il n'y a donc pas unicité de l'ensemble vide. 
 
+\subsection{Relations et fonctions}
+
+On note  $ s \leftrightarrow t \Bequal \mathbb{P}(s \times t)$ qui est l'ensemble des relations entre les éléments de $s$ et les éléments de $t$. De plus, une paire ordonnée $(x, y)$ est notée $x \mapsto y$.
+
 \section{Machines abstraites}
 
 \subsection{Description informelle}
 
-La méthode B est fondée sur la notion de \emph{modèle}. Un\emph{modèle}, on le sait, doit pouvoir décrire les \emph{opérations} d'un système, ses données entrantes et sortantes et des valeurs (son \emph{état}) et des propriétés sur ces données et valeurs (des \emph{contraintes} ou \emph{invariants}).
+La méthode B est fondée sur la notion de \emph{modèle}. Un \emph{modèle}, on le sait, doit pouvoir décrire les \emph{opérations} d'un système, ses données entrantes et sortantes et des valeurs (son \emph{état}) et des propriétés sur ces données et valeurs (des \emph{contraintes} ou \emph{invariants}).
 
 Un utilisateur d'un système qui en connaît un modèle peut fournir des données et valeurs en entrée (i.e. fournir un état du système dans la modélisation actuelle) et observer l'état sortant. Tous ces  éléments (propriétés, données, opérations, état) peuvent être aussi abstraits et généraux que voulu.
 
@@ -215,7 +216,7 @@ Ce qui donne les mots clés de base en langage B, appelés \emph{clauses} :
 \item \textbf{INVARIANTS} sous lequel on énonce les invariants sur l'état~;
 \item \textbf{CONSTANTS}, sous lequel on liste les constantes de fonctionnement~;
 \item \textbf{PROPERTIES}, sous lequel on liste les propriétés logiques les constantes~;
-\item \textbf{SETS}, sous lequel on liste les types de données utilisés pour cette machine~;
+\item \textbf{SETS}, sous lequel on liste les types de données utilisés pour cette machine.
 \end{itemize}
 \ \\
 Les paramètres sont quant à eux listés entre parenthèse après le nom de la machine. Il existe d'autres clauses, moins importantes pour la définition formelle, qui seront vues lorsque nécessaires, et sont en tous cas dans l'annexe.
@@ -238,16 +239,16 @@ des variables d’état de la machine, quelles que soient les opérations appliq
 \textbf{CONSTANTS}
 \fi
 
-\subsection Un exemple.
+\subsection{Un exemple}
 
 Cet exemple est tiré de TODO \iffalse(manque l'élément bibliographique)\fi.
 
 
-\subsubsection Spécification d'un modèle en langage courant
+\subsubsection{Spécification d'un modèle en langage courant}
 
-Nous allons modéliser en B une bibliohèque.
+Nous allons modéliser en B une bibliothèque.
 
-Celle-ci gère des livres, des exemplaires de livres, et des abonnés : ce sont les types de données (en plus des types communs, dont les entiers qui nous seront utiles).
+Celle-ci gère des livres, des exemplaires de livres et des abonnés : ce sont les types de données (en plus des types communs, dont les entiers qui nous seront utiles).
 
 Les règles de la bilbiothèque sont les suivantes : un exemplaire est emprunté par au plus un abonné, et un abonné ne peut emprunter plus d'une certaine limite d'exemplaire. Ce sont les invariants de notre bibliothèque.
 
@@ -336,6 +337,8 @@ La théorie des ensembles de Zermelo est publiée en 1908 et instaure une axioma
 
 En 1922, Fraenkel et Skolem ajoutent des axiomes et le système en résultant est connu sous le nom de théorie de Zermelo-Fraenkel, abrégé en ZF.
 
+L'axiome du choix, déjà présent dans la théorie d'origine de Zermelo est souvent rajouté séparément.
+
 On utilise la logique du premier ordre.
 TODO: développer un peu cette logique.
 
@@ -417,9 +420,57 @@ Ainsi, pour toute propriété $\phi$ ne contenant pas d'autre variable libre que
 \end{align}
 \end{axiom}
 
-\section Compléments syntaxiques du langage B :
+\section{Logique de Hoare pour la preuve de programmes}
 
-\subsection Autres clauses des machines abstraites :
+Un triplet $ \{P\}\;C\;\{Q\} $ est à interpréter dans la logique de Hoare de la façon suivante : si la propriété $P$ est vraie et qu'on exécute le code $C$, alors si $C$ termine on a la propriété $Q$. En particulier, si on n'a pas de garantie sur la terminaison de l'instruction $C$ on parle de correction partielle. La propriété $P$ est appelée précondition et $Q$ postcondition.
+
+Les règles d'inférences de Hoare permettent la construction de programmes devant être appelés avec certaines préconditions et garantissant certaines postconditions.
+
+\begin{axiom}[Règle de la conditionnelle]
+On note $ P[E/x]$ l'expression $P$ dans laquelle les occurrences libres de la variable $x$ ont été remplacées par l'expression $E$.
+\begin{align}
+\frac{}{\{P[E/x]\}\ x:=E \ \{P\} }
+\end{align}
+\end{axiom}
+
+\begin{axiom}[Règle de la composition séquentielle]
+\begin{align}
+\frac {\{P\}\ S\ \{Q\}\ , \ \{Q\}\ T\ \{R\} } {\{P\}\ S;T\ \{R\}}
+\end{align}
+\end{axiom}
+
+\begin{axiom}[Règle de la conditionnel]
+\begin{align}
+\frac { \{B \wedge P\}\ S\ \{Q\}\ ,\ \{\neg B \wedge P \}\ T\ \{Q\} } { \{P\}\ \textbf{si}\ B\ \textbf{alors}\ S\ \textbf{sinon}\ T\ \textbf{finsi}\ \{Q\} }
+\end{align}
+\end{axiom}
+
+\begin{axiom}[Règle de l'itération (boucle while)]
+\begin{align}
+\frac { \{Inv \wedge C \}\ S\ \{Inv \} } { \{Inv \}\ \textbf{tant que}\ C\ \textbf{faire}\ S\ \textbf{fait}\ \{Inv \wedge \neg C \} }
+\end{align}
+\end{axiom}
+
+\begin{axiom}[Règle de conséquence]
+\begin{align}
+\frac { P^\prime \rightarrow\ P\ ,\ \lbrace P \rbrace\ S\ \lbrace Q \rbrace\ ,\ Q \rightarrow\ Q^\prime } { \lbrace P^\prime\ \rbrace\ S\ \lbrace Q^\prime\rbrace }
+\end{align}
+\end{axiom}
+
+On peut prouver la correction totale à condition de prouver la terminaison des boucles.
+Pour se faire, il faut et il suffit qu'il existe une relation $<$ bien fondée (i.e. il n'existe pas de suite infinie $(x_n)$ d'éléments telle qu'on ait $\forall n, \ x_{n+1} < x_n$), et une expression $V$ appelée variant, dont la valeur décroit strictement à chaque itération de la boucle.
+
+\begin{axiom}[Règle de l'itération avec terminaison]
+\begin{align}
+\frac{< \textrm{\ est\ bien fondée},\;\{Inv \land C \land V=z \}\;S\;\{Inv \land V < z\}} {\textrm{la boucle suivante termine}, \{Inv\}\;\textbf{tant que}\;C\; \textbf{faire}\; S \ \textbf{fait} \;\{Inv \land \lnot C \} }
+\end{align}
+\end{axiom}
+%\mathbf{tant que}
+
+
+\section{Compléments syntaxiques du langage B}
+
+\subsection{Autres clauses des machines abstraites}
 
 \textbf{ASSERTIONS} : Propriété logique dérivée des invariants, contraintes et propriétés. Étant dérivées, i.e. induites par le reste, il n'est pas nécessaire de les démontrer - et même, elles n'impliquent a priori pas réciproquement le reste. En revanche, elles facilitent le travail du prouveur automatique.
 
