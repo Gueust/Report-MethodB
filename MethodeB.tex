@@ -22,7 +22,15 @@
 %\usepackage{tikz}
 %\usepackage[all]{xy}
 
-\usepackage[hidelinks]{hyperref}
+\usepackage{hyperref} %[hidelinks]
+\usepackage[usenames,dvipsnames]{color}
+\hypersetup{
+  colorlinks   = true, %Colours links instead of ugly boxes
+  urlcolor     = Blue, %Colour for external hyperlinks
+  linkcolor    = Blue, %Colour of internal links
+  citecolor   = Blue %Colour of citations
+}
+
 % To add a word in the links maded by hyperref
 % but cleveref goes "laster" than hyperref
 \usepackage[nameinlink,noabbrev, french]{cleveref}
@@ -64,16 +72,18 @@
 
 \begin{document}
 \maketitle
+
+\begingroup
+\hypersetup{hidelinks}
 \tableofcontents
+\endgroup
+
+
 \newpage
 
 \begin{abstract}
 La méthode B, inventé par Jean-Raymond Abrial, est une méthode pour spécifier, concevoir et générer du code de systèmes logiciels tout en satisfaisant des contraintes de preuves de propriétés.
 Elle est basée sur la théorie des ensembles de Zermelo-Fraenkel avec l'axiome du choix, le concept de substitutions généralisées et une certaine approche de la complexité (par la définition de machine abstraite, raffinement et d'implémentation).
-
-%The concept of refinement is the key notion for developing B models
-%of (software) systems in an incremental way. B models are accompanied by mathematical proofs that %justify
-%them.
 \end{abstract}
 
 \iffalse
