@@ -254,16 +254,17 @@ On peut dans cette bilbiothèque créer des livres ou des exemplaires de livres,
 Voici les clauses rédigée en B (ici avec des symboles mathématiques, voir annexe (TODO : ref) pour la syntaxe en caractères ASCII).
 \\
 \\
-\textbf{MACHINE}\\
-\indent \indent \begin{equation*}BIBLIOTHEQUE (maxi)\end{equation*}\\
-\textbf{CONSTRAINTS}\\
-\indent \indent \begin{equation*} maxi \in N1 \end{equation*}
-\textbf{SETS}\\
-\indent \indent \begin{equation*} LIVRES; \\ PERSONNES\\ \end{equation*}
-\textbf{VARIABLES}\\
-\begin{equation*} livre , exemplaire , abonne , emprunt \end{equation*}
-\textbf{INVARIANTS}
+\\
+\textbf{MACHINE}
 \setlength\LTleft{\parindent}
+\begin{longtable}{ll} BIBLIOTHEQUE (maxi) \end{longtable}
+\noindent\textbf{CONSTRAINTS}
+\begin{longtable}{ll} maxi $\in$ N1 \end{longtable}
+\noindent\textbf{SETS}
+\begin{longtable}{ll} LIVRES; \\ PERSONNES\\ \end{longtable}
+\noindent\textbf{VARIABLES}
+\begin{longtable}{ll} livre , exemplaire , abonne , emprunt \end{longtable}
+\noindent\textbf{INVARIANTS}
 \begin{longtable}{ll}
 $livre \subseteq LIVRE $ & $\wedge$ \tabularnewline
 $abonne \subseteq PERSONNE$ & $\wedge$ \tabularnewline
@@ -271,25 +272,25 @@ $exemplaire \in livre \leftrightarrow N1$ & $\wedge$ \tabularnewline
 $emprunt \in ( exemplaire \nrightarrow abonne )$ & $\wedge$ \tabularnewline
 $\forall ab\ (\ ab \in abonne \Rightarrow (\ \textbf{card}\ (\ emprunt ^{-1}[\{ab\}] \leq maxi\ ))$ &
 \end{longtable}
-\textbf{INITIALISATION}
+\noindent\textbf{INITIALISATION}
 \begin{longtable}{ll}
 $livre := \emptyset$ & $||$ \tabularnewline
 $exemplaire := \emptyset$ & $||$ \tabularnewline
 $abonne := \emptyset$ & $||$ \tabularnewline
 $emprunt := \emptyset$ &
 \end{longtable}
-\setlength\LTleft{\fill}
 
 \subsubsection{La machine abstraite, partie dynamique}
 
 Et voici maintenant la partie dynamique : la clause d'opérations.
-
-\noindent \textbf{OPERATIONS}\\
-\indent\begin{equation*} lr \leftarrow creer_Livre \doteq \end{equation*}\\
-\indent \indent \textbf{PRE}\\
-\indent \indent \indent \begin{equation*} LIVRE\ -\ livre \neq \emptyset \end{equation*}
-
-
+\\
+\\
+\\
+\noindent \textbf{OPERATIONS}
+\begin{longtable}{ll} lr $\leftarrow$ creer\_Livre $\doteq$ \tabularnewline some stuff \end{longtable}
+\indent \textbf{PRE}
+\begin{longtable}{ll} & LIVRE\ \textbackslash \ livre $\neq$ $\emptyset$ \end{longtable}
+\setlength\LTleft{\fill}
 
 \subsection{Preuve d'invariants}
 
