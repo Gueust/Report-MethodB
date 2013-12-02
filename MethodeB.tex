@@ -177,7 +177,7 @@ Un utilisateur d'un système qui en connaît un modèle peut fournir des donnée
 L'utilisateur ne connaît rien du fonctionnement interne du système au delà de la précision de son modèle. Ainsi la suite des états internes par lesquels passe la machine lors d'une opération n'est pas accessible à l'utilisateur ayant déclenché l'opération.
 \\
 
-En méthode B, ces notions se traduisent dans une \emph{machine abstraite} : c'est exactement l'appellation en méthode B d'un modèle. Une machine abstraite propose et réalise des opérations (c'est une machine) directement implémentables en code logiciel ou non (elle est abstraite).
+En méthode B, ces notions se traduisent dans une \emph{machine abstraite} : c'est exactement l'appellation en méthode B d'un modèle. Une machine abstraite propose et réalise des opérations sur un état (c'est une machine), qui sont ou non directement implémentables en code logiciel (elle est abstraite).
 
 Notons, d'un point de vue industriel, qu'une machine abstraite représente un ensemble de besoins, d'exigences ou de spécifications de niveau donné. Nous verrons par la suite comment, de même que l'on précise et concrétise des besoins en exigences puis en spécifications de plus en plus précises et de plus en plus proche de l'implémentation, de même l'on passe de machines abstraites en machines moins abstraites.
 
@@ -248,6 +248,44 @@ Celle-ci gère des livres, des exemplaires de livres et des abonnés : ce sont l
 Les règles de la bilbiothèque sont les suivantes : un exemplaire est emprunté par au plus un abonné, et un abonné ne peut emprunter plus d'une certaine limite d'exemplaire. Ce sont les invariants de notre bibliothèque.
 
 On peut dans cette bilbiothèque créer des livres ou des exemplaires de livres, et en prêter à des abonnés qui les empruntent. Ce sont nos opérations.
+
+\subsubsection{La machine abstraite, partie statique}
+
+Voici les clauses rédigée en B (ici avec des symboles mathématiques, voir annexe (TODO : ref) pour la syntaxe en caractères ASCII).
+\\
+\\
+\textbf{MACHINE}\\
+\indent \indent \begin{equation*}BIBLIOTHEQUE (maxi)\end{equation*}\\
+\textbf{CONSTRAINTS}\\
+\indent \indent \begin{equation*} maxi \in N1 \end{equation*}
+\textbf{SETS}\\
+\indent \indent \begin{equation*} LIVRES; \\ PERSONNES\\ \end{equation*}
+\textbf{VARIABLES}\\
+\begin{equation*} livre , exemplaire , abonne , emprunt \end{equation*}
+\textbf{INVARIANTS}\\
+\begin{align*} livre \subseteq LIVRE && \wedge\\
+abonne \subseteq PERSONNE &&\wedge\\
+exemplaire \in livre \leftrightarrow N1 && \wedge\\
+emprunt \in ( exemplaire \nrightarrow abonne ) && \wedge \\
+\forall ab\ (\ ab \in abonne \Rightarrow (\ \textbf{card}\ (\ emprunt ^{-1}[\{ab\}] \leq maxi\ ))
+\end{align*}
+\textbf{INITIALISATION}
+\begin{align*}
+livre := \emptyset && ||\\
+exemplaire := \emptyset && ||\\
+abonne := \emptyset && ||\\
+emprunt := \emptyset
+\end{align*}
+
+\subsubsection{La machine abstraite, partie dynamique}
+
+Et voici maintenant la partie dynamique : la clause d'opérations.
+
+\noindent \textbf{OPERATIONS}\\
+\indent\begin{equation*} lr \leftarrow creer_Livre \doteq \end{equation*}\\
+\indent \indent \textbf{PRE}\\
+\indent \indent \indent \begin{equation*} LIVRE\ -\ livre \neq \emptyset \end{equation*}
+
 
 
 \subsection{Preuve d'invariants}
