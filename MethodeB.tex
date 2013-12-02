@@ -159,7 +159,7 @@ Cela donne ainsi l'axiomatique:
 
 \subsection{Type-checking}
 
-L'idée est que lors de la preuve d'un prédicat ayant des variables liées à des quantificateurs, les variables liées sont supposées appartenir à un ensemble.
+L'idée est que, lors de la preuve d'un prédicat ayant des variables liées à des quantificateurs, les variables liées sont supposées appartenir à un ensemble.
 Sans en détailler ici toutes les implications, il est toutefois important de remarquer que l'ajout de ces contraintes de type-checking rend l'ensemble vide typé du type de l'ensemble dont il est le résultat (i.e. $\varnothing = A - A$), et il n'y a donc pas unicité de l'ensemble vide. 
 
 \subsection{Relations et fonctions}
@@ -177,7 +177,7 @@ Un utilisateur d'un système qui en connaît un modèle peut fournir des donnée
 L'utilisateur ne connaît rien du fonctionnement interne du système au delà de la précision de son modèle. Ainsi la suite des états internes par lesquels passe la machine lors d'une opération n'est pas accessible à l'utilisateur ayant déclenché l'opération.
 \\
 
-En méthode B, ces notions se traduisent dans une \emph{machine abstraite} : c'est exactement l'appellation en méthode B d'un modèle. Une machine abstraite propose et réalise des opérations sur un état (c'est une machine), qui sont ou non directement implémentables en code logiciel (elle est abstraite).
+En méthode B, ces notions se traduisent dans une \emph{machine abstraite} : c'est exactement l'appellation en méthode B d'un modèle. Une machine abstraite propose et réalise des opérations (c'est une machine) directement implémentables en code logiciel ou non (elle est abstraite).
 
 Notons, d'un point de vue industriel, qu'une machine abstraite représente un ensemble de besoins, d'exigences ou de spécifications de niveau donné. Nous verrons par la suite comment, de même que l'on précise et concrétise des besoins en exigences puis en spécifications de plus en plus précises et de plus en plus proche de l'implémentation, de même l'on passe de machines abstraites en machines moins abstraites.
 
@@ -262,20 +262,23 @@ Voici les clauses rédigée en B (ici avec des symboles mathématiques, voir ann
 \indent \indent \begin{equation*} LIVRES; \\ PERSONNES\\ \end{equation*}
 \textbf{VARIABLES}\\
 \begin{equation*} livre , exemplaire , abonne , emprunt \end{equation*}
-\textbf{INVARIANTS}\\
-\begin{align*} livre \subseteq LIVRE && \wedge\\
-abonne \subseteq PERSONNE &&\wedge\\
-exemplaire \in livre \leftrightarrow N1 && \wedge\\
-emprunt \in ( exemplaire \nrightarrow abonne ) && \wedge \\
-\forall ab\ (\ ab \in abonne \Rightarrow (\ \textbf{card}\ (\ emprunt ^{-1}[\{ab\}] \leq maxi\ ))
-\end{align*}
+\textbf{INVARIANTS}
+\setlength\LTleft{\parindent}
+\begin{longtable}{ll}
+$livre \subseteq LIVRE $ & $\wedge$ \tabularnewline
+$abonne \subseteq PERSONNE$ & $\wedge$ \tabularnewline
+$exemplaire \in livre \leftrightarrow N1$ & $\wedge$ \tabularnewline
+$emprunt \in ( exemplaire \nrightarrow abonne )$ & $\wedge$ \tabularnewline
+$\forall ab\ (\ ab \in abonne \Rightarrow (\ \textbf{card}\ (\ emprunt ^{-1}[\{ab\}] \leq maxi\ ))$ &
+\end{longtable}
 \textbf{INITIALISATION}
-\begin{align*}
-livre := \emptyset && ||\\
-exemplaire := \emptyset && ||\\
-abonne := \emptyset && ||\\
-emprunt := \emptyset
-\end{align*}
+\begin{longtable}{ll}
+$livre := \emptyset$ & $||$ \tabularnewline
+$exemplaire := \emptyset$ & $||$ \tabularnewline
+$abonne := \emptyset$ & $||$ \tabularnewline
+$emprunt := \emptyset$ &
+\end{longtable}
+\setlength\LTleft{\fill}
 
 \subsubsection{La machine abstraite, partie dynamique}
 
@@ -294,6 +297,13 @@ Et voici maintenant la partie dynamique : la clause d'opérations.
 %les raffinements préservent la correction totale
 
 Pour prouver une opération dans une machine, il faut que son initialisation établisse l’invariant et que son exécution le conserve. Il faut donc vérifier que l’initialisation et l’opération elle-même respectent la propriété invariante de l’opération. Les invariants sont notés dans la clause INVARIANT de la machine abstraite. 
+
+
+Il y a donc deux types de vérification en B :
+– la correction (ou validité) syntaxique (type-checking ) qui porte
+sur la vérification des types ;
+– la vérification axiomatique ou sémantique (obligation de
+preuves ).
 
 \section{Raffinement}
 
@@ -362,13 +372,48 @@ Preuve à réalisée en B événementiel:
 \item $ I(x) \Rightarrow \left( grd(e_1) \vee \ldots grd(e_n) \right)$
 \end{itemize}
 
+\iffalse
+In the last two subsections, we have introduced B models following the classification
+into two main categories abstract machines and models; both are called components
+but they are not dealing with the same approach. We detail structuring mechanisms
+of both approaches to be complete on references of work 
 
+Abstract machines are based on classical mechanisms like the call of operation or the
+input/output mechanisms. On the other hand, reactive systems react to the environ-
+ment with respect to external stimuli; abstract models of the event-based B approach
+intend to integrate the reactivity to stimuli by promoting events rather than opera-
+tions.
+Contrary to operations, events have no parameters and there is no access to
+state variables. At most one event is observed at any time of the system.
+
+An (abstract) model is made up of a part defining mathematical structures
+related to the problem to solve and a part containing elements on state variables,
+transitions and (safety and invariance) properties of the model. Proof obligations
+are generated from the model to ensure that properties are effectively holding: it
+is called internal consistency of the model. A model is assumed to be closed and
+it means that every possible change over state variables is defined by transitions;
+transitions correspond to events observed by the specifier.
+page 19
+
+
+La preuve de cohérence porte
+notamment sur la préservation de l'invariant, comme nous l’avons
+vu en B classique, complétée par deux autres preuves : la preuve
+de faisabilité et la preuve de vivacité.\cite{dossierTechnique}
+\fi
 
 \section{Nécessité de tests fonctionnels}
 
-La méthode B ne garantit que ce la conformité entre l'implémentation vis-à-vis de la spécification formelle de départ et ne peut pas garantir que la spécification de départ est correcte ou qu'il n'y a pas eu des erreurs d'interprétation qui ont conduit à des erreurs dans la spécification formelle.
+Comme le montre la~\cref{DifferentsCycles}, le développent formel permet de ne pas avoir à faire les tests unitaires et les tests d'intégrations. Cependant, la méthode B ne garantit que la conformité entre l'implémentation vis-à-vis de la spécification formelle de départ et ne peut pas garantir que la spécification de départ est correcte ou qu'il n'y a pas eu des erreurs d'interprétation qui ont conduit à des erreurs dans la spécification formelle.
 
-Les tests fonctionnels sont ainsi indispensables pour passer des scénarios issus directement de la spécification textuelle (pour se garantir des erreurs d'interprétation lors du passage à la spécification formelle) ainsi que des scénarios à appliquer qui vont en principe bien au-delà de la spécification afin de se garantir d'erreurs au niveau de la spécification textuelle.
+Les tests fonctionnels sont ainsi indispensables pour passer des scénarios issus directement de la spécification textuelle (pour se garantir des erreurs d'interprétation lors du passage à la spécification formelle) ainsi que des scénarios à appliquer qui vont en principe bien au-delà de la spécification afin de se garantir d'erreurs au niveau de la spécification textuelle (scénarios opérationnels).
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.70]{ressources/formal_dev.png}
+\caption{\label{DifferentsCycles}
+Cycle de développement formel vs cycle conventionnel~\cite[page 374]{behm1999meteor}.}
+\end{figure}
 
 \section{Exemples d'utilisation de la méthode B}
 
