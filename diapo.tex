@@ -2,7 +2,7 @@
 \usepackage{etex}
 %\documentclass[handout]{beamer}
 
-%\usetheme{Madrid}
+\usetheme{Madrid}
 
 %
 % To use when printing
@@ -101,9 +101,9 @@
 \begin{frame}
 \frametitle{Introduction}
 %\framesubtitle{DTA overview}
-La méthode B c'est langage unique permettant de :
+La méthode B, inventé par Jean-Raymond Abrial, est langage unique permettant de :
 \begin{itemize}
-\item Spécifier
+\item Spécifier formellement
 \item Raffiner ces spécifications
 \item Aboutir à une implémentation
 \end{itemize}
@@ -122,7 +122,8 @@ L'Atelier B (ClearSy) permet d'encadrer le processus industriel :
 \end{frame}
 
 \begin{frame}
-\frametitle{Cycle de développement formel vs cycle conventionnel}
+\frametitle{Introduction}
+\framesubtitle{Cycle de développement formel vs cycle conventionnel}
 \begin{figure}[h]
 \centering
 \includegraphics[scale=0.33]{ressources/formal_dev.png}
@@ -135,17 +136,145 @@ L'Atelier B (ClearSy) permet d'encadrer le processus industriel :
 \frame{\tableofcontents}
 
 \section{Modélisation formelle}
+\subsection{Théorie des ensembles}
+\begin{frame}
+\frametitle{Modélisation formelle}
+\framesubtitle{Théorie des ensembles}
+\begin{description}
+\item[Définition de la paire] $(E, F) \in s \times t \Leftrightarrow E \in s \wedge F \in t$
+\item[Ensemble des parties] $s \in \mathbb{P}(t) \Leftrightarrow \forall x (x \in s \Rightarrow x \in t)$
+\item[Ensemble en compréhension] $E \in \{ x | x \in s \wedge P \} \Leftrightarrow (E \in s \wedge [x:= E] P)$
+\item[Égalité d'ensembles] $\forall x (x \in s \Leftrightarrow x \in t) \Rightarrow s = t$
+\item[Axiome du choix] $\exists x  (x \in s) \Rightarrow choice(s) \in s$
+\item[Axiome de l'infini] Existence d'un ensemble infini nommé BIG
+\end{description}
+\end{frame}
+
+
+
+\section{Modélisation en méthode B}
+\subsection{Les machines abstraites}
 \begin{frame}
 \frametitle{Les machines abstraites}
 \framesubtitle{Un exemple}
 
 \end{frame}
 
-\section{L'implémentation}
+\subsection{Le raffinement de machines}
+\begin{frame}
+\frametitle{Le raffinement de machines}
+Le raffinement est le fait de transformer une spécification abstraite en un texte plus proche de la programmation, pour finalement obtenir un programme.
 
+En pratique il s'agit de :
+\begin{itemize}
+\item Reformulation en fonction du changement d’état
+\item Affaiblissement des préconditions
+\item Réduction du non-déterminisme
+\end{itemize}
+
+\end{frame}
+
+
+
+\subsection{L'implémentation}
+\begin{frame}
+\frametitle{Implémentations}
+Le langage $B_0$ est un sous langage de la méthode B qui est directement traduisible en un programme (en ADA, C, C++, etc.).  Il est ainsi très proche d'un langage séquentiel.
+
+\pause
+
+Un certain nombre de restrictions :
+\begin{itemize}
+\item aucune précondition
+\item que des substitutions déterministes ( $:=$, \textsc{IF}, ";" par exemple)
+\item toutes les constantes et variables sont d'un type concret
+\item la terminaison et la correction des boucles doit être prouvée par l'utilisation d'invariants et de variants
+\end{itemize}
+
+\end{frame}
+
+\section{Preuve de propriétés}
+\begin{frame}
+\frametitle{Preuve de programmes}
+Le système de preuve est basée sur la vérification que :
+\begin{itemize}
+\item Les propriétés invariantes sont vérifiées par la
+dynamique
+\item Les raffinements préservent la correction totale
+des propriétés invariantes
+\end{itemize}
+
+\pause
+Pour cela, on se base sur la logique de Hoare :
+\begin{itemize}
+\item
+Principe de correction partielle : $ \{P\}\;S\;\{Q\} $ 
+
+Si l'état satisfait P avant S et si S termine, alors l'état satisfait Q après l'exécution de S.
+\item
+Recherche de la plus faible précondition:
+
+Si l'état satisfait wp(S, Q) avant S alors S termine et l'état satisfait Q après.
+On le note sous la forme de la substitution $[S]Q$.
+\end{itemize}
+\end{frame}
+
+\iffalse
+\subsection{Raffinement}
+\begin{frame}
+\frametitle{Obligations de preuve}
+\begin{columns}[t]
+  \begin{column}{5cm}
+    \textsc{machine} $M$ \\
+    \textsc{variables} $x$ \\
+    \textsc{invariant} $I$ \\
+    \textsc{initialisation} $U$ \\
+    \textsc{operations} \\
+    \quad $r \longleftarrow nom\_op(w) =$ \\
+    \qquad \textsc{pre} $P$ \textsc{then} $K$ \textsc{end} \\
+    \textsc{end}
+\end{column}
+  
+  \begin{column}{5cm}
+    \textsc{refinement} $N$ \textsc{refines} $M$ \\
+    \textsc{variables} $y$ \\
+    \textsc{invariant} $J$ \\
+    \textsc{initialisation} $V$ \\
+    \textsc{operations} \\
+    \quad $r \longleftarrow nom\_op(w) =$ \\
+    \qquad \textsc{pre} $Q$ \textsc{then} $L$ \textsc{end} \\
+    \textsc{end}  
+  \end{column}
+\end{columns}  
+ 
+Pour chaque opération il faut prouver:
+\begin{itemize}
+\item I ∧ J ∧ P ⇒ Q 
+\item 
+\end{itemize}
+\end{frame}
+\fi
+
+\section{Diffusion de la méthode B}
+\begin{frame}
+\frametitle{Diffusion de la méthode B}
+\framesubtitle{Météor}
+Logiciel sécuritaire : 86 000 lignes Ada (1 000
+composants)
+\begin{itemize}
+\item 115 000 lignes B
+\item 27 800 obligations de preuve
+\begin{itemize}
+\item 81\% de preuve automatique
+\item 92\% après ajout de règles (550)
+\item 2 254 à prouver interactivement
+\end{itemize}
+\item Utilisateur d'un matériel sûr Vital Coded Processor (VCP) : processeur vérifiant son état et l'intégrité du code exécuté
+\end{itemize}
+\end{frame}
 
 \begin{frame}
-\frametitle{Questions ?}
+\frametitle{La méthode B événementielle}
 
 \end{frame}
 
