@@ -333,7 +333,7 @@ Voici une liste des principales caractéristiques d'une implémentation :
 \begin{itemize}
 \item Une machine IMPLEMENTATION n’a pas d’état qui lui est propre. Elle n’a pas de clause VARIABLES.
 \item Elle doit importer (IMPORTS d’autres machines dont elle utilise les opérations pour implanter les opérations de la machine quelle implémente (qui est une MACHINE ou un REFINEMENT). 
-\item Elle ne voit (SEES) que les opérations (leur signature)des machines importées. Elle ne voit pas leur variables d’état. Il y a donc un masquage total des “données”. 
+\item Elle ne voit (SEES) que les opérations (leur signature) des machines importées. Elle ne voit pas leur variables d’état. Il y a donc un masquage total des “données”.
 \item Il n’y a plus ni indéterminisme ni substitution parallèle.
 \item Les opérations n’ont plus de précondition. Mais le code est fourni sous l’hyppothèse que l’opération ne sera appelée que “sous sa précondition” (dit autrement, “que si sa précondition est respectée”). Et cela est dit dans la machine abstraite que l’on implante.
 \end{itemize}
@@ -359,18 +359,51 @@ Il n'est autorisé que dans une machine IMPLEMENTATION.
 
 On peut en particulier importer des machines de bases ou des bibliothèques fournies avec l’Atelier B et qui fournissent des fonctionnalités. Il s'agit par exemple de BASIC\_IO pour les entrées/sorties usuelles et de L\_ARITHMETIQUE qui offre des opérations arithmétiques (i.e. exponentielle, racine carrée etc).
 
+
+\section{Nécessité de tests fonctionnels}
+
+Comme le montre la~\cref{DifferentsCycles}, le développent formel permet de ne pas avoir à faire les tests unitaires et les tests d'intégrations. Cependant, la méthode B ne garantit que la conformité entre l'implémentation vis-à-vis de la spécification formelle de départ et ne peut pas garantir que la spécification de départ est correcte ou qu'il n'y a pas eu des erreurs d'interprétation qui ont conduit à des erreurs dans la spécification formelle.
+
+Les tests fonctionnels sont ainsi indispensables pour passer des scénarios issus directement de la spécification textuelle (pour se garantir des erreurs d'interprétation lors du passage à la spécification formelle) ainsi que des scénarios à appliquer qui vont en principe bien au-delà de la spécification afin de se garantir d'erreurs au niveau de la spécification textuelle (scénarios opérationnels).
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.70]{ressources/formal_dev.png}
+\caption{\label{DifferentsCycles}
+Cycle de développement formel vs cycle conventionnel~\cite[page 374]{behm1999meteor}.}
+\end{figure}
+
+\section{Exemples d'utilisation de la méthode B}
+
+\emph{La première application réellement industrielle a été la ligne METEOR (ligne 14) du métro parisien mise en service en octobre 1998. D'autres lignes de métro ont suivi un peu partout dans le monde. Pour fixer les idées, l'un des logiciels critiques d'un des systèmes de transport a nécessité 40 000 lignes B, 160 000 lignes de code ADA, environ 44 000 obligations de preuve B dont 1 300 ont eu besoin d'une démonstration interactive (non automatique) et une centaine de règles ajoutées.}\cite{dossierTechnique}
+
+\subsection{Diffusion de la méthode B}
+\emph{Dans tous les secteurs industriels ont été développées les notions très voisines de SIL (Safety Integrity Level) dans le domaine du transport ferroviaire et de l’industrie, d’ASIL (Automotive Safety Integrity Level ) dans le domaine automobile ou de DAL (Development Assurance Level) dans le domaine aéronautique. Un SIL est lié au niveau de confiance que l'on peut avoir dans un système. Ce niveau de confiance est associé au niveau de qualité du processus de conception/réalisation pour éviter les erreurs systématiques (principalement pour le logiciel ou des circuits intégrés complexes) et est associé à un niveau de probabilité par heure (et par ensemble) d'obtenir une défaillance contraire à la sécurité pour les erreurs aléatoires (principalement pour le matériel).}\cite{dossierTechnique}
+
+\emph{Un processus de conception/réalisation est caractérisé par une organisation, des méthodes, des outils et des techniques spécifiques pour répondre au niveau de confiance exigé. Plus un logiciel est critique, plus on doit disposer d'une organisation robuste et des méthodes et outils qui permettent d'éviter les erreurs ou de les détecter si elles apparaissent malgré tout. Par exemple, dans le secteur ferroviaire, la norme EN50128 précise que pour un logiciel SIL3 et SIL4, les méthodes formelles sont hautement recommandées, et cela a tendance à se généraliser à l'ensemble du monde industriel.}\cite{dossierTechnique}
+
+La \cref{UtilisationB} présente la diffusion de la méthode B pour les systèmes logiciels SIL4.
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.23]{ressources/carte-monde-projets-b.jpg}
+\caption{\label{UtilisationB}Diffusion de la méthode B. Image provenant de \url{http://www.methode-b.com/methode-formelle}}
+\end{figure}
+
+
+
 \section{B événementiel et programme}
 
-\emph{Une machine en B  événementiel, on dit un système, n’a pas des opérations qui seront appelées par d’autres opérations, mais des  événements. Un  événement est spécifié comme une opération gardée. Un événement  est une transition qu’on peut observer.\newline
-\indent Un  événement est déclenché lorsque sa garde est vérifiée. Si plusieurs événements sont déclenchables (i.e. leur garde est vérifiée), le déclenchement est indéterminisme. \newline
-\indent Quand on raffine, alors qu’en B classique on affaiblit les préconditions, en B événementiel, on renforce les gardes. 
-}habrias2006specifications
+Au milieu des années 90, une extension de la méthode B a été développée afin d'étudier non seulement des systèmes logiciels mais aussi des systèmes événementiels représentés sous forme de systèmes à transitions.
 
-Preuve à réalisée en B événementiel:
+\emph{Une machine en B  événementiel, n'a pas des opérations qui seront appelées par d'autres opérations, mais des  événements. Un  événement est spécifié comme une opération gardée. Un événement  est une transition qu'on peut observer.\newline
+\indent Un  événement est déclenché lorsque sa garde est vérifiée. Si plusieurs événements sont déclenchables (i.e. leur garde est vérifiée), le déclenchement est indéterminisme. \newline
+\indent Quand on raffine, alors qu'en B classique on affaiblit les préconditions, en B événementiel, on renforce les gardes.}\cite{habrias2006specifications}
+
+Les preuves a réaliser diffèrent du B \og normal\fg. Par exemple il faut :
 \begin{itemize}
-\item $Init \Rightarrow I(x)$
-\item $ I(x) \wedge BA(e)(x, x') \Rightarrow I(x')$
-\item $ I(x) \Rightarrow \left( grd(e_1) \vee \ldots grd(e_n) \right)$
+\item prouver que l'état initial vérifie l'invariant pour l'état initial $x$; $ Init \Rightarrow I(x)$
+\item prouver que tous les événements respectent les invariants : $ I(x) \wedge P(e)(x, x') \Rightarrow I(x')$ où $BA(e)(x, x')$ sont les prédicats associés à événement $e$ sur l'état initial $x$ et l'état final $x'$.
+\item prouver l'absence de deadlock (i.e. une garde est toujours vérifiée) : $ I(x) \Rightarrow \left( grd(e_1) \vee \ldots grd(e_n) \right)$
 \end{itemize}
 
 \iffalse
@@ -402,36 +435,6 @@ notamment sur la préservation de l'invariant, comme nous l’avons
 vu en B classique, complétée par deux autres preuves : la preuve
 de faisabilité et la preuve de vivacité.\cite{dossierTechnique}
 \fi
-
-\section{Nécessité de tests fonctionnels}
-
-Comme le montre la~\cref{DifferentsCycles}, le développent formel permet de ne pas avoir à faire les tests unitaires et les tests d'intégrations. Cependant, la méthode B ne garantit que la conformité entre l'implémentation vis-à-vis de la spécification formelle de départ et ne peut pas garantir que la spécification de départ est correcte ou qu'il n'y a pas eu des erreurs d'interprétation qui ont conduit à des erreurs dans la spécification formelle.
-
-Les tests fonctionnels sont ainsi indispensables pour passer des scénarios issus directement de la spécification textuelle (pour se garantir des erreurs d'interprétation lors du passage à la spécification formelle) ainsi que des scénarios à appliquer qui vont en principe bien au-delà de la spécification afin de se garantir d'erreurs au niveau de la spécification textuelle (scénarios opérationnels).
-
-\begin{figure}[h]
-\centering
-\includegraphics[scale=0.70]{ressources/formal_dev.png}
-\caption{\label{DifferentsCycles}
-Cycle de développement formel vs cycle conventionnel~\cite[page 374]{behm1999meteor}.}
-\end{figure}
-
-\section{Exemples d'utilisation de la méthode B}
-
-\emph{La première application réellement industrielle a été la ligne METEOR (ligne 14) du métro parisien mise en service en octobre 1998. D'autres lignes de métro ont suivi un peu partout dans le monde. Pour fixer les idées, l'un des logiciels critiques d'un des systèmes de transport a nécessité 40 000 lignes B, 160 000 lignes de code ADA, environ 44 000 obligations de preuve B dont 1 300 ont eu besoin d'une démonstration interactive (non automatique) et une centaine de règles ajoutées.}\cite{dossierTechnique}
-
-\subsection{Diffusion de la méthode B}
-\emph{Dans tous les secteurs industriels ont été développées les notions très voisines de SIL (Safety Integrity Level) dans le domaine du transport ferroviaire et de l’industrie, d’ASIL (Automotive Safety Integrity Level ) dans le domaine automobile ou de DAL (Development Assurance Level) dans le domaine aéronautique. Un SIL est lié au niveau de confiance que l'on peut avoir dans un système. Ce niveau de confiance est associé au niveau de qualité du processus de conception/réalisation pour éviter les erreurs systématiques (principalement pour le logiciel ou des circuits intégrés complexes) et est associé à un niveau de probabilité par heure (et par ensemble) d'obtenir une défaillance contraire à la sécurité pour les erreurs aléatoires (principalement pour le matériel).}\cite{dossierTechnique}
-
-\emph{Un processus de conception/réalisation est caractérisé par une organisation, des méthodes, des outils et des techniques spécifiques pour répondre au niveau de confiance exigé. Plus un logiciel est critique, plus on doit disposer d'une organisation robuste et des méthodes et outils qui permettent d'éviter les erreurs ou de les détecter si elles apparaissent malgré tout. Par exemple, dans le secteur ferroviaire, la norme EN50128 précise que pour un logiciel SIL3 et SIL4, les méthodes formelles sont hautement recommandées, et cela a tendance à se généraliser à l'ensemble du monde industriel.}\cite{dossierTechnique}
-
-La \cref{UtilisationB} présente la diffusion de la méthode B pour les systèmes logiciels SIL4.
-\begin{figure}[h]
-\centering
-\includegraphics[scale=0.23]{ressources/carte-monde-projets-b.jpg}
-\caption{\label{UtilisationB}Diffusion de la méthode B. Image provenant de \url{http://www.methode-b.com/methode-formelle}}
-\end{figure}
-
 
 \appendix
 
