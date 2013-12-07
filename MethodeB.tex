@@ -255,8 +255,10 @@ Voici les clauses rédigée en B (ici avec des symboles mathématiques, voir ann
 \\
 \\
 \\
-\textbf{MACHINE}
+\setlength{\LTpre}{\medskipamount} % \smallskipamount, \medskipamount, \bigskipamount
+\setlength{\LTpost}{0pt}
 \setlength\LTleft{\parindent}
+\textbf{MACHINE}
 \begin{longtable}{ll} BIBLIOTHEQUE (maxi) \end{longtable}
 \noindent\textbf{CONSTRAINTS}
 \begin{longtable}{ll} maxi $\in$ N1 \end{longtable}
@@ -285,11 +287,11 @@ $emprunt := \emptyset$ &
 Et voici maintenant la partie dynamique : la clause d'opérations.
 \\
 \\
-\\
 \noindent \textbf{OPERATIONS}
 \begin{longtable}{ll} lr $\leftarrow$ creer\_Livre $\doteq$ \tabularnewline some stuff \end{longtable}
 \indent \textbf{PRE}
 \begin{longtable}{ll} & LIVRE\ \textbackslash \ livre $\neq$ $\emptyset$ \end{longtable}
+
 \setlength\LTleft{\fill}
 
 \subsection{Preuve d'invariants}
@@ -327,37 +329,38 @@ il y a des choix non déterministes laissant la place à des décisions plus tar
 \section{Implémentation de modèles}
 
 Le langage $B_0$ est un sous langage de la méthode B qui est directement traduisible en un programme (en ADA, C, C++, etc.).
-L'implémentation est un raffinement d'une machine abstraite appartenant à $B_0$ et pouvant donc être utilisé pour la génération de code.
+L'implémentation est un raffinement d'une machine abstraite appartenant à $B_0$ et pouvant donc être utilisé pour la génération de code.\\
 
-Voici une liste des principales caractéristiques d'une implémentation :
-\begin{itemize}
-\item Une machine IMPLEMENTATION n’a pas d’état qui lui est propre. Elle n’a pas de clause VARIABLES.
-\item Elle doit importer (IMPORTS d’autres machines dont elle utilise les opérations pour implanter les opérations de la machine quelle implémente (qui est une MACHINE ou un REFINEMENT). 
-\item Elle ne voit (SEES) que les opérations (leur signature) des machines importées. Elle ne voit pas leur variables d’état. Il y a donc un masquage total des “données”.
-\item Il n’y a plus ni indéterminisme ni substitution parallèle.
-\item Les opérations n’ont plus de précondition. Mais le code est fourni sous l’hyppothèse que l’opération ne sera appelée que “sous sa précondition” (dit autrement, “que si sa précondition est respectée”). Et cela est dit dans la machine abstraite que l’on implante.
-\end{itemize}
+\subsection{Restriction du langage}
 
-Il faut que les substitutions soient exécutables et les expressions et prédicats évaluables.
-Les seules substitutions autorisées sont :
+En particulier, une implémentation ne peut plus comporter d'indéterminisme. Il faut ainsi que les substitutions soient exécutables et les expressions et prédicats évaluables.
+Les seules substitutions autorisées sont\footnote{La suite provient de \cite{habrias2006specifications}} :
 \begin{itemize}
 \item :=
 \item ; (la composition séquentielle)
 \item IF ...THEN...ELSE...END et variantes
 \item CASE
-\item WHILE ...DO ...INVARIANT...VARIANT...END (la boucle avec l’invariant de boucle et le variant de boucle)
+\item WHILE ...DO ...INVARIANT...VARIANT...END (la boucle avec l'invariant de boucle et le variant de boucle)
 \item VAR ...IN ...END
 \item Les opérations des machines importées
-\item les opérations d’interrogation des machines vues
+\item les opérations d'interrogation des machines vues
 \item Les machines importées sont initialisées selon leur propre clause INITIALISATION, à moins que la machine IMPLEMENTATION ait une clause INITIALISATION.
 \end{itemize}
-\subsection{L'importation de machine par IMPORTS}
 
-Elle a obligatoirement aussi une clause REFINES qui indique quelle machine (MACHINE
-ou REFINEMENT) est implantée. \emph{Le lien IMPORTS entre une impantation MI et une instance de machine importée MA permet de créer l’instance de MA et ainsi de disposer de ses opérations.\cite{habrias2006specifications}}
-Il n'est autorisé que dans une machine IMPLEMENTATION.
+En plus de cela, une implémentation vérifie aussi un certain nombre de propriétés :
+\begin{itemize}
+\item Les opérations n'ont plus de précondition. Mais le code est fourni sous l'hypothèse que l'opération ne sera appelée que en respectant sa précondition, qui est définie dans la machine abstraite que l'on implante
+\item Une machine IMPLEMENTATION n'a pas d'état qui lui est propre. Elle n'a pas de clause VARIABLES.
+\item Elle doit importer (IMPORTS d'autres machines dont elle utilise les opérations pour implanter les opérations de la machine quelle implémente (qui est une MACHINE ou un REFINEMENT). 
+\item Elle ne voit (SEES) que les opérations (leur signature) des machines importées. Elle ne voit pas leur variables d'état. Il y a donc un masquage total des données.
+\end{itemize}
 
-On peut en particulier importer des machines de bases ou des bibliothèques fournies avec l’Atelier B et qui fournissent des fonctionnalités. Il s'agit par exemple de BASIC\_IO pour les entrées/sorties usuelles et de L\_ARITHMETIQUE qui offre des opérations arithmétiques (i.e. exponentielle, racine carrée etc).
+
+\subsection{L'utilisation de machines importées}
+
+\emph{Le lien IMPORTS entre une implémentation MI et une instance de machine importée MA permet de créer l'instance de MA et ainsi de disposer de ses opérations.\cite{habrias2006specifications}}
+
+On peut en particulier importer des machines de bases ou des bibliothèques fournies avec l'Atelier B et qui fournissent des fonctionnalités. Il s'agit par exemple de BASIC\_IO pour les entrées/sorties usuelles et de L\_ARITHMETIQUE qui offre des opérations arithmétiques (i.e. exponentielle, racine carrée etc).
 
 
 \section{Nécessité de tests fonctionnels}
