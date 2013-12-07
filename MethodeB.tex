@@ -41,6 +41,7 @@
 % Pour ordonner les citations etc
 \usepackage{cite}
 
+
 \newtheorem{prop}{Proposition}[section]
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{lemma}{Lemma}[section]
@@ -61,15 +62,15 @@
 \date\today
 
 
-\newcommand{\Bequal}{\mathrel{\widehat{=}}}
+\usepackage{wrapfig}
 
+\newcommand{\Bequal}{\mathrel{\widehat{=}}}
 
 %\renewcommand{\thechapter}{\Roman{chapter})}
 %\renewcommand{\thesection}{\Roman{section}} %Alph
 %\renewcommand{\thesubsection}{\arabic{subsection})}
 %\renewcommand{\thesubsubsection}{\alph{subsubsection})}
 %\renewcommand{\theparagraph}{\engrec{paragraph})}
-
 \begin{document}
 \maketitle
 
@@ -213,7 +214,8 @@ Ce qui donne les mots clés de base en langage B, appelés \emph{clauses} :
 \item \textbf{SETS}, sous lequel on liste les types de données utilisés pour cette machine.
 \end{itemize}
 \ \\
-Les paramètres sont listés entre parenthèses après le nom de la machine. Il existe également d'autres clauses, certaines seront vues dans la suite et le reste est réservé à des utilisations spécifiques.
+Les paramètres sont listés entre parenthèses après le nom de la machine. Il existe également d'autres clauses, certaines seront vues dans la suite et le reste est donné en~\cref{ComplementSyntaxique}.
+
 \iffalse
 La méthode B introduit un langage rigoureux pour représenter les programmes et leurs propriétés en utilisant le concept de substitution généralisée. Elle utilise la notion simple de machine abstraite qui est assez voisine de la notion d’objet, mais qui, en plus, intègre la notion d'invariant assurant la préservation de propriétés
 des variables d'état de la machine, quelles que soient les opérations appliquées.
@@ -290,22 +292,37 @@ Et voici maintenant la partie dynamique : la clause d'opérations.
 \begin{longtable}{ll} lr $\leftarrow$ creer\_Livre $\doteq$ \tabularnewline some stuff \end{longtable}
 \indent \textbf{PRE}
 \begin{longtable}{ll} & LIVRE\ \textbackslash \ livre $\neq$ $\emptyset$ \end{longtable}
-
 \setlength\LTleft{\fill}
 
 \subsection{Preuve d'invariants}
 
-%Les propriétés invariantes sont vérifiées par la dynamique
-%les raffinements préservent la correction totale
+\setlength{\intextsep}{0pt}%
+\setlength{\columnsep}{15pt}%
+\begin{wrapfigure}[11]{r}{0.3\textwidth}
+\noindent \textbf{MACHINE} m \newline
+\textbf{CONSTANTS} $k$ \newline
+\textbf{PROPERTIES} $T$ \newline
+\textbf{VARIABLES} $v$ \newline
+\textbf{INVARIANT} $I$ \newline
+\textbf{INITIALISATION} $L$ \newline
+\textbf{OPERATIONS} \newline
+$y \leftarrow op(x) \Bequal$ \newline
+\hspace*{1em}  \textbf{PRE} $P$ \textbf{THEN} $S$ \newline
+\hspace*{2em} \textbf{END} \newline
+\hspace*{1em} \textbf{END} \newline
+\textbf{END}
+\captionof{figure}{Structure d'une machine abstraite}
+\label{M1}
+\end{wrapfigure}
 
-Pour prouver une opération dans une machine, il faut que son initialisation établisse l’invariant et que son exécution le conserve. Il faut donc vérifier que l’initialisation et l’opération elle-même respectent la propriété invariante de l’opération. Les invariants sont notés dans la clause INVARIANT de la machine abstraite. 
+Pour prouver une opération dans une machine, il faut que son initialisation établisse l'invariant et que son exécution le conserve. Il faut donc vérifier que l'initialisation et l'opération elle-même respectent la propriété invariante de l'opération. Les invariants sont notés dans la clause INVARIANT de la machine abstraite. \\
 
+Formellement, pour une machine telle que celle représentée par la~\cref{M1}, il faut faire les vérifications suivantes :
+\begin{description}
+\item[L'initialisation établie l'invariant] $L[I]$ 
+\item[Les opérations conservent l'invariant] $I \wedge P \Rightarrow [S]I$ 
+\end{description}
 
-Il y a donc deux types de vérification en B :
-– la correction (ou validité) syntaxique (type-checking ) qui porte
-sur la vérification des types ;
-– la vérification axiomatique ou sémantique (obligation de
-preuves ).
 
 \section{Raffinement}
 
@@ -320,7 +337,7 @@ Une substitution \textbf{$T$ est un raffinement de S} s'il établit aussi R (i.e
 L’action élémentaire est formalisée au moyen d’une généralisation de la notion de substitution, dite \og substitution généralisée \fg. Parmi ces substitutions généralisées,
 il y a des choix non déterministes laissant la place à des décisions plus tardives qui seront prises dans la phase de raffinement.
 
-\section{Implémentation de modèles}
+\section{Implémentation}
 
 Le langage $B_0$ est un sous langage de la méthode B qui est directement traduisible en un programme (en ADA, C, C++, etc.).
 L'implémentation est un raffinement d'une machine abstraite appartenant à $B_0$ et pouvant donc être utilisé pour la génération de code.\\
@@ -349,13 +366,94 @@ En plus de cela, une implémentation vérifie aussi un certain nombre de propri�
 \item Elle ne voit (SEES) que les opérations (leur signature) des machines importées. Elle ne voit pas leur variables d'état. Il y a donc un masquage total des données.
 \end{itemize}
 
-
 \subsection{L'utilisation de machines importées}
 
 \emph{Le lien IMPORTS entre une implémentation MI et une instance de machine importée MA permet de créer l'instance de MA et ainsi de disposer de ses opérations.\cite{habrias2006specifications}}
 
 On peut en particulier importer des machines de bases ou des bibliothèques fournies avec l'Atelier B et qui fournissent des fonctionnalités. Il s'agit par exemple de BASIC\_IO pour les entrées/sorties usuelles et de L\_ARITHMETIQUE qui offre des opérations arithmétiques (i.e. exponentielle, racine carrée etc).
 
+\section{Un exemple complet}
+\label{ExempleComplet}
+% Installation de l'Atelier B pour u unbuntu 64 bits : http://blog.bentobako.org/index.php?post/2012/12/17/How-to-install-Atelier-B-4.1-on-a-Debian-like-64-bits-machine
+On cherche a modéliser une fonction minimum et maximum\footnote{L'exemple est issu de \url{http://www.site-naheulbeuk.com/utbm/lo19/rapport_methode_b.pdf}}.
+Le code source est disponible en~\cref{CodeSource}.
+
+\noindent \textbf{MACHINE} utils \\
+\textbf{CONSTANTS} $t,n$ \\
+\textbf{OPERATIONS} \\
+$res \leftarrow mini(x, y) \Bequal$ \\
+\hspace*{1em}  \textbf{PRE} $x \in \mathbb{N} \wedge  y \in \mathbb{N} $ \textbf{THEN} \\
+\hspace*{2em} res := min(\{x, y\})  \\
+\hspace*{1em} \textbf{END} \\
+$res \leftarrow maxi(x, y, z) \Bequal$ \\
+\hspace*{1em}  \textbf{PRE} $x \in \mathbb{N} \wedge  y \in \mathbb{N} \wedge z \in \mathbb{N}$ \textbf{THEN} \\
+\hspace*{2em} res := max(\{x, y, z\})  \\
+\hspace*{1em} \textbf{END} \\
+\textbf{END}
+
+Un implémentation correspondante est par exemple :
+
+\noindent \textbf{IMPLEMENTATION}  utils\_i \\
+\textbf{REFINES} utils
+\textbf{OPERATIONS} \\
+$res \leftarrow mini ( x , y ) =$ \\
+\hspace*{1em}    \textbf{IF}  $x \geq y$ \textbf{THEN} \\
+\hspace*{2em}        res:= yy \\
+\hspace*{1em}    \textbf{ELSE} \\
+\hspace*{2em}        res := xx \\
+\hspace*{1em}    \textbf{END}; \\
+$res \leftarrow maxi ( xx , yy , zz ) = $ \\
+\hspace*{1em}    \textbf{BEGIN} \\
+\hspace*{1em}    \textbf{IF} $xx \geq yy$ \textbf{THEN} \\
+\hspace*{2em}        res := xx \\
+\hspace*{1em}    \textbf{END}; \\
+\hspace*{1em}   \textbf{IF} $xx \leq yy$  \textbf{THEN} \\
+\hspace*{2em}        res := yy \\
+\hspace*{1em}    \textbf{END}; \\
+\hspace*{1em}   \textbf{IF} $res \leq zz$ \textbf{THEN} \\
+\hspace*{2em}        res := zz \\
+\hspace*{1em}    \textbf{END} \\
+\hspace*{1em}    \textbf{END} \\
+\textbf{END}
+
+\iffalse
+\noindent \textbf{MACHINE} search \\
+\textbf{CONSTANTS} $t,n$ \\
+\textbf{PROPERTIES} 
+$n \in \mathbb{N} \wedge t \in 0..n-1 \rightarrow \mathbb{N}$ \\
+\textbf{OPERATIONS} \\
+$b \leftarrow search(v) \Bequal$ \\
+\hspace*{1em}  \textbf{PRE} $v \in \mathbb{N}$ \textbf{THEN} \\
+\hspace*{2em} \textbf{IF} $v \in \text{ran}(t)$ \textbf{THEN} \\
+\hspace*{2em} b:=true \\
+\hspace*{2em} \textbf{ELSE} \\
+\hspace*{2em} b:=false \\
+\hspace*{2em} \textbf{END} \\
+\hspace*{1em} \textbf{END} \\
+\textbf{END}
+
+On peut ensuite la rafinée en la machine suivante :7
+
+\noindent \textbf{MACHINE} searchR \\
+\textbf{REFINES} search \\
+\textbf{OPERATIONS} \\
+$b \leftarrow search(v) \Bequal$ \\
+\hspace*{1em} \textbf{VAR} i \textbf{IN} \\
+\hspace*{1em} $i:=0$ \\
+\hspace*{1em} \textbf{WHILE} $i < n$ \textbf{DO} \\
+\hspace*{2em} \textbf{IF} $t(i)=v$ \textbf{THEN} \\
+\hspace*{3em} b:=true \\
+\hspace*{2em} \textbf{END} \\
+\hspace*{2em} i:=i+1 \\
+\hspace*{2em} \textbf{INVARIANT} \\
+\hspace*{3em} $0 \leq i \leq n \quad \wedge$ \\
+\hspace*{3em} $b \in \mathbb{B} \quad \wedge$ \\
+\hspace*{3em} $b = true \Leftrightarrow v \in t[0..i-1]$ \\
+\hspace*{2em} \textbf{VARIANT} \\
+\hspace*{3em} $n-i$ \\
+\hspace*{1em}\textbf{END} \\
+\textbf{END} \\
+\fi
 
 \section{Nécessité de tests fonctionnels}
 
@@ -573,7 +671,7 @@ Pour se faire, il faut et il suffit qu'il existe une relation $<$ bien fondée (
 
 
 \section{Compléments syntaxiques du langage B}
-
+\label{ComplementSyntaxique}
 \subsection{Autres clauses des machines abstraites}
 
 \textbf{ASSERTIONS} : Propriété logique dérivée des invariants, contraintes et propriétés. Étant dérivées, i.e. induites par le reste, il n'est pas nécessaire de les démontrer - et même, elles n'impliquent a priori pas réciproquement le reste. En revanche, elles facilitent le travail du prouveur automatique.
@@ -581,6 +679,69 @@ Pour se faire, il faut et il suffit qu'il existe une relation $<$ bien fondée (
 \textbf{DEFINITIONS} : Alias facilitant la rédaction du reste de la machine.
 
 TODO : $ABSTRACT\_CONSTANTS$, $CONCRETE\_VARIABLES$
+
+\section{Code source de l'exemple}
+\label{CodeSource}
+Cette annexe contient le code source associé à l'exemple donné à la~\cref{ExempleComplet}, page~\pageref{ExempleComplet}.
+
+\paragraph{Code source de la machine abstraite}
+\begin{verbatim}
+MACHINE
+    utils
+OPERATIONS
+res <-- mini(xx,yy) =
+    PRE
+        xx : NAT &
+        yy : NAT
+    THEN
+        res := min ({xx,yy})
+    END;
+res <--maxi(xx,yy,zz) =
+    PRE
+        xx : NAT &
+        yy : NAT &
+        zz : NAT
+    THEN
+        res := max({xx,yy,zz})
+    END
+END
+\end{verbatim}
+
+\paragraph{Code source de l'implémentation}
+\begin{verbatim}
+IMPLEMENTATION
+   utils_i
+REFINES
+   utils
+OPERATIONS
+res <-- mini ( xx , yy ) =
+    IF
+        xx >= yy
+    THEN
+        res:= yy
+    ELSE
+        res := xx
+    END;
+res <--maxi ( xx , yy , zz ) =
+    BEGIN
+    IF
+        xx >= yy
+    THEN
+        res := xx
+    END;
+    IF
+        xx <= yy
+    THEN
+        res := yy
+    END;
+    IF
+        res <= zz
+    THEN
+        res := zz
+    END
+    END
+END
+\end{verbatim}
 
 % ===================================
 % Bib
