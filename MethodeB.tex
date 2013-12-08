@@ -163,6 +163,45 @@ Cela donne ainsi l'axiomatique:
 L'idée est que, lors de la preuve d'un prédicat ayant des variables liées à des quantificateurs, les variables liées sont supposées appartenir à un ensemble.
 Sans en détailler ici toutes les implications, il est toutefois important de remarquer que l'ajout de ces contraintes de type-checking rend l'ensemble vide typé du type de l'ensemble dont il est le résultat (i.e. $\varnothing = A - A$), et il n'y a donc pas unicité de l'ensemble vide. 
 
+\subsection{Langage de substitution généralisée}
+
+Un triplet $ \{P\}\;S\;\{Q\} $ est à interpréter dans la logique de Hoare de la façon suivante : si la propriété $P$ est vraie et qu'on exécute le code $S$, alors si $S$ termine on a la propriété $Q$. En particulier, si on n'a pas de garantie sur la terminaison de l'instruction $S$ on parle de correction partielle. La propriété $P$ est appelée précondition et $Q$ postcondition. Les axiomes de la logique de Hoare sont donnés en~\cref{Hoare}.
+
+Pour un prédicat $Q$ et une exécution $S$, on définie la plus faible précondition $wp(S, Q)$ (\emph{wp} pour weakest precondition) telle que :
+\begin{itemize}
+\item $wp(S, Q)$ est une précondition garantissant $Q$  après exécution de $S$ : $ \{ wp(S, Q) \} S \{ Q\}$
+\item $wp(S, Q)$  est la plus faible précondition : si $\{ P \} S \{ Q \}$ alors $P \Rightarrow wp(S, Q)$.
+\end{itemize}~
+
+En B on utilise la notation $[S]Q$ au lieu de $wp(S, Q)$. On ne traitera pas ici de l'existence de la plus faible précondition mais la preuve se fait par induction structurelle\footnote{On pourra aller voir \url{http://www.lsv.ens-cachan.fr/~haddad/courstdagreg.pdf} pour une peuve complète.}. Voici la définition de certaines substitutions généralisées\footnote{La boucle n'a pas été définie par exemple.} :
+\begin{description}
+\item[Substitution simple] ~
+
+$[ x := E ]P \Leftrightarrow P[E/x]$ où $P[E/x]$ est le prédicat $P$ où toutes les occurrences libres de $x$ (i.e. qui ne sont pas sous le contrôle d'un quantificateur) ont été remplacé par $E$. En particulier, on a alors $\{ [x := E ]P \} x := E\{ P\}$, par définition même de la plus faible précondition.
+\item[Substitution identité]  ~
+
+$[\textsc{skip}]I \Leftrightarrow I$
+\item[Substitution séquentielle]  ~
+
+$[S1;S2]P 	\Leftrightarrow [S1]([S2]P)$
+\item[Substitution préconditionnée]  ~
+
+$[\textsc{PRE } P \textsc{ THEN } S \textsc{ END}]I \Leftrightarrow P \wedge [S]I$
+\item[Substitution conditionnelle]  ~
+
+$[\textsc{IF } Q \textsc{ THEN } S1 \textsc{ ELSE } S2 \textsc{ END}]P \Leftrightarrow (Q \Rightarrow [S1]P) \wedge( (\lnot Q)\Rightarrow [S2]P)$
+\item[Substitution gardée]  ~
+
+$[\textsc{SELECT } P \textsc{ THEN } S \textsc{ END}]I \Leftrightarrow P \Rightarrow [S]I$
+\item[Substitution de choix binaire indéterministe]  ~
+
+$[\textsc{CHOICE } S \textsc{ OR } T \textsc{ END}]I \Leftrightarrow [S]I \wedge [T ]I$
+\item[Substitution de choix non borné indéterministe] ~
+
+$[\textsc{ANY } z \textsc{ WHERE } P \textsc{ THEN } S \textsc{ END}]I \Leftrightarrow \forall x \bullet [S]I$ pour x n'étant pas libre dans I
+\end{description}
+
+
 \subsection{Relations et fonctions}
 
 On note  $ s \leftrightarrow t \Bequal \mathbb{P}(s \times t)$ qui est l'ensemble des relations entre les éléments de $s$ et les éléments de $t$. De plus, une paire ordonnée $(x, y)$ est notée $x \mapsto y$.
@@ -565,7 +604,6 @@ En 1922, Fraenkel et Skolem ajoutent des axiomes et le système en résultant es
 L'axiome du choix, déjà présent dans la théorie d'origine de Zermelo est souvent rajouté séparément.
 
 On utilise la logique du premier ordre.
-TODO: développer un peu cette logique.
 
 \subsection{Théorie de Zermelo (Z)}
 
@@ -646,13 +684,12 @@ Ainsi, pour toute propriété $\phi$ ne contenant pas d'autre variable libre que
 \end{axiom}
 
 \section{Logique de Hoare pour la preuve de programmes}
-
-Un triplet $ \{P\}\;C\;\{Q\} $ est à interpréter dans la logique de Hoare de la façon suivante : si la propriété $P$ est vraie et qu'on exécute le code $C$, alors si $C$ termine on a la propriété $Q$. En particulier, si on n'a pas de garantie sur la terminaison de l'instruction $C$ on parle de correction partielle. La propriété $P$ est appelée précondition et $Q$ postcondition.
+\label{Hoare}
 
 Les règles d'inférences de Hoare\footnote{Une partie de ces règles proviennent de \url{http://www.pps.univ-paris-diderot.fr/~kesner/enseignement/master1/gl/hoare-4.pdf}.} permettent la construction de programmes devant être appelés avec certaines préconditions et garantissant certaines postconditions.
 
 \begin{axiom}[Règle de la conditionnelle]
-On note $ P[E/x]$ l'expression $P$ dans laquelle les occurrences libres de la variable $x$ ont été remplacées par l'expression $E$.
+On note $P[E/x]$ l'expression $P$ dans laquelle les occurrences libres de la variable $x$ ont été remplacées par l'expression $E$.
 \begin{align}
 \frac{}{\{P[E/x]\}\ x:=E \ \{P\} }
 \end{align}
