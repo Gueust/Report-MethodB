@@ -398,6 +398,16 @@ Une substitution \textbf{$T$ est un raffinement de S} s'il établit aussi R (i.e
 L’action élémentaire est formalisée au moyen d’une généralisation de la notion de substitution, dite \og substitution généralisée \fg. Parmi ces substitutions généralisées,
 il y a des choix non déterministes laissant la place à des décisions plus tardives qui seront prises dans la phase de raffinement.
 
+\subsection{Les obligations de preuves de raffinement}
+
+En utilisant les même notations que dans la machine décrite~\cref{M1}, avec en plus la notation ' pour les champs de la machine raffinée, les obligations de preuves sont les suivantes:
+\begin{itemize}
+\item $\exists v,v’,~ (I’ \wedge I) $
+\item $[L’]\lnot[L]\lnot I’$
+\item $\forall v,v’,~ (I \wedge I’ \wedge P) \Rightarrow P’ \wedge [S’]\lnot[S]\lnot I’$
+\end{itemize}
+
+La deuxième propriété peut être paraphrasée en : \emph{L'initialisation concrète établit qu'il n'est pas vrai que l'initialisation abstraite établit qu'il n'est pas vrai que l'invariant soit établi}\cite{habrias2006specifications}. La double négation est nécessaire pour faire face à la réduction d'indéterminisme.
 \section{Implémentation}
 
 Le langage $B_0$ est un sous langage de la méthode B qui est directement traduisible en un programme (en ADA, C, C++, etc.).
