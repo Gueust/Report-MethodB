@@ -150,7 +150,7 @@ De plus, l'axiome de la paire est modifié pour construire une paire ordonnée e
 Cela donne ainsi l'axiomatique:
 \begin{description}
 \item[Définition de la paire] $(E, F) \in s \times t \Leftrightarrow E \in s \wedge F \in t$
-\item[Ensemble des parties] $s \in \mathbb{P}(t) \Leftrightarrow \forall x (x \in s \Rightarrow x \in t)$
+\item[Ensemble des parties] $s \in \mathbb{P}(t) \Leftrightarrow \forall x (x \in s \rightarrow x \in t)$
 \item[Ensemble en compréhension] $E \in \{ x | x \in s \wedge P \} \Leftrightarrow (E \in s \wedge [x:= E] P)$
 \item[Égalité d'ensembles] $\forall x (x \in s \Leftrightarrow x \in t) \Rightarrow s = t$
 \item[Axiome du choix] $\exists x  (x \in s) \Rightarrow choice(s) \in s$
@@ -286,10 +286,30 @@ Et voici maintenant la partie dynamique : la clause d'opérations.
 \\
 \\
 \\
-\noindent \textbf{OPERATIONS}
-\begin{longtable}{ll} lr $\leftarrow$ creer\_Livre $\doteq$ \tabularnewline some stuff \end{longtable}
-\indent \textbf{PRE}
-\begin{longtable}{ll} & LIVRE\ \textbackslash \ livre $\neq$ $\emptyset$ \end{longtable}
+\noindent \textbf{OPERATIONS}\\ \\
+\indent lr $\leftarrow$ creer\_Livre $\doteq$
+\begin{longtable}{ll} \textbf{PRE} \tabularnewline
+\indent LIVRE\ \textbackslash \ livre $\neq$ $\emptyset$ \tabularnewline
+\textbf{THEN} \tabularnewline
+\indent \textbf{ANY} \emph{ll} \textbf{WHERE} \tabularnewline \indent \indent \emph{ll} $\in$ LIVRE\ \textbackslash \ livre \tabularnewline
+\indent \textbf{THEN} \tabularnewline
+\indent \indent livre := livre $\cup$ \{\emph{ll}\} $||$ \tabularnewline
+\indent \indent lr := \emph{ll} \tabularnewline
+\indent \textbf{END} \tabularnewline
+\textbf{END};
+\end{longtable}
+
+\indent emprunter(\emph{aa}, \emph{ll}) $\doteq$
+\begin{longtable}{lll}
+\textbf{PRE} \tabularnewline
+\indent \emph{aa} $\in$ abonne & $\wedge$ \tabularnewline 
+\indent \emph{ll} $\in$ livre & $\wedge$ \tabularnewline
+\indent $\exists$ \emph{nn}.\ (\emph{nn} $\in$ N1 $\wedge$ \emph{ll} $\mapsto$ \emph{nn} $\in$ exemplaire $\wedge$ \emph{ll} $\mapsto$ \emph{nn} $\notin$ dom(emprunt)) & $\wedge$ \tabularnewline
+\indent \textbf{card}(emprunt $^{-1}$[$\{$ab$\}$] $<$ maxi) \tabularnewline
+\textbf{THEN} \tabularnewline \indent emprunt := emprunt $\cup$ \{(\emph{ll} $\mapsto$ \emph{nn}) $\mapsto$ \emph{aa})\} \tabularnewline
+\textbf{END} \tabularnewline
+\end{longtable}
+
 \setlength\LTleft{\fill}
 
 \subsection{Preuve d'invariants}
@@ -297,7 +317,7 @@ Et voici maintenant la partie dynamique : la clause d'opérations.
 %Les propriétés invariantes sont vérifiées par la dynamique
 %les raffinements préservent la correction totale
 
-Pour prouver une opération dans une machine, il faut que son initialisation établisse l’invariant et que son exécution le conserve. Il faut donc vérifier que l’initialisation et l’opération elle-même respectent la propriété invariante de l’opération. Les invariants sont notés dans la clause INVARIANT de la machine abstraite. 
+Pour prouver une opération dans une machine, il faut que son initialisation établisse l’invariant et que son exécution le conserve. Il faut donc vérifier que l’initialisation et l’opération elle-même respectent la propriété invariante de l’opération. Les invariants, rappelons-le, sont notés dans la clause INVARIANT de la machine abstraite. 
 
 
 Il y a donc deux types de vérification en B :
