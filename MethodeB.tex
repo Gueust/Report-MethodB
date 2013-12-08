@@ -175,7 +175,7 @@ Pour un prédicat $Q$ et une exécution $S$, on définie la plus faible précond
 \item $wp(S, Q)$  est la plus faible précondition : si $\{ P \} S \{ Q \}$ alors $P \Rightarrow wp(S, Q)$.
 \end{itemize}~
 
-En B on utilise la notation $[S]Q$ au lieu de $wp(S, Q)$. On ne traitera pas ici de l'existence de la plus faible précondition mais la preuve se fait par induction structurelle\footnote{On pourra aller voir \url{http://www.lsv.ens-cachan.fr/~haddad/courstdagreg.pdf} pour une peuve complète.}. Voici la définition de certaines substitutions généralisées\footnote{La boucle n'a pas été définie par exemple.} :
+En B on utilise la notation $[S]Q$ au lieu de $wp(S, Q)$. On ne traitera pas ici de l'existence de la plus faible précondition mais la preuve se fait par induction structurelle\footnote{On pourra aller voir \url{http://www.lsv.ens-cachan.fr/~haddad/courstdagreg.pdf} pour une peuve complète.}. Voici la définition de certaines\footnote{La boucle n'a pas été définie par exemple.} substitutions généralisées\footnote{Les substitutions sont issus de \cite{habrias2006specifications} et \url{http://www.pps.univ-paris-diderot.fr/~eleph/Enseignement/2001-02/SCL/b.pdf}.} :
 \begin{description}
 \item[Substitution simple] ~
 
@@ -383,6 +383,16 @@ Formellement, pour une machine telle que celle représentée par la~\cref{M1}, i
 \item[L'initialisation établie l'invariant] $L[I]$ 
 \item[Les opérations conservent l'invariant] $I \wedge P \Rightarrow [S]I$ 
 \end{description}
+
+\iffalse
+\currentparskip
+{\setlength{\currentparskip}{\parskip}% save the value
+\begin{minipage}[c]{0.60\linewidth}
+\setlength{\parskip}{\currentparskip}% restore the value
+\end{minipage} \hfill
+\begin{minipage}[l]{0.30\linewidth}
+\end{minipage}
+\fi
 
 
 \section{Raffinement}
