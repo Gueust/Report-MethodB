@@ -226,31 +226,28 @@ Notons, d'un point de vue industriel, qu'une machine abstraite représente un en
 Une machine abstraite c'est :
 \begin{itemize}
 \item un \textbf{nom}, pour l'appel depuis l'extérieur~;
-\\
 \item des \textbf{paramètres}, dimensionnant la machine~;
 \item des \textbf{contraintes}, sur les paramètres~;
-\\
 \item un \textbf{état}, composé des valeurs d'un ensemble de variables~;
-\item des \textbf{types de données}, potentiellement abstraits, dans lesquels trouver les variables d'état~;
-\item des \textbf{invariants}, propriétés sur l'état décrites en logique 1er ordre/ZFC~;
+\item des \textbf{types de données}, potentiellement abstraits, dans lesquels doivent se trouver les variables d'état~;
+\item des \textbf{invariants}, propriétés sur l'état décrites en logique du $1^{\text{er}}$ ordre et théorie des ensembles~;
 \item une \textbf{initialisation}, pour tout ce petit monde~;
-\\
 \item des \textbf{constantes}, valeurs utiles aux opérations, mais non modifiées par elles, et indépendantes de la machine~;
 \item des \textbf{propriétés}, expressions logiques sur les constantes~;
-\\
 \item et enfin des \textbf{opérations}, qui modifient l'état de départ en l'état d'arrivée en conservant les invariants.
 \end{itemize}
 \ \\
 Ce qui donne les mots clés de base en langage B, appelés \emph{clauses} :
 \begin{itemize}
-\item \textbf{MACHINE} sous lequel on nomme la machine~;
-\item \textbf{CONSTRAINTS} sous lequel on contraint les paramètres~;
-\item \textbf{VARIABLES} sous lequel on liste les variables constitutant l'état~;
-\item \textbf{INITIALIZATION}, sous lequel on initialise les variables d'état~;
-\item \textbf{INVARIANTS} sous lequel on énonce les invariants sur l'état~;
-\item \textbf{CONSTANTS}, sous lequel on liste les constantes de fonctionnement~;
-\item \textbf{PROPERTIES}, sous lequel on liste les propriétés logiques les constantes~;
-\item \textbf{SETS}, sous lequel on liste les types de données utilisés pour cette machine.
+\item \textbf{MACHINE} : contient le nom de la machine~;
+\item \textbf{CONSTRAINTS} : contient les axiomes caractérisant les paramètres~;
+\item \textbf{SETS} : contient la déclaration des ensembles dont se servira la machine~;
+\item \textbf{CONSTANTS} : contient la déclaration des noms des constantes~;
+\item \textbf{PROPERTIES} : contient les axiomes caractérisant les constantes~;
+\item \textbf{VARIABLES} : contient la déclaration des variables constituant l'état de la machine~;
+\item \textbf{INVARIANTS} : contient une formule logique qui est l'invariant que doit satisfaire la machine (i.e. que doit satisfaire son état interne)~;
+\item \textbf{INITIALIZATION} : contient une substitution généralisée qui définie la valeur initiale des variables~;
+\item \textbf{OPERATIONS} : contient les définitions des opérations de la machine. Une opération est définie sous forme d'une substitution généralisée et peut modifier l'état de la machine, prendre des arguments ou (inclusif) renvoyer une valeur.
 \end{itemize}
 \ \\
 Les paramètres sont listés entre parenthèses après le nom de la machine. Il existe également d'autres clauses, certaines seront vues dans la suite et le reste est donné en~\cref{ComplementSyntaxique}.
