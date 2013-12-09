@@ -150,7 +150,26 @@ L'Atelier B (ClearSy) permet d'encadrer le processus industriel :
 \end{description}
 \end{frame}
 
-
+\begin{frame}
+\frametitle{Ce qu'il faut retenir}
+\begin{itemize}
+\item B est un langage et une méthode de spécification
+\item C'est une méthode formelle (permettant des preuves)
+\item Le langage est basé sur la théorie des ensembles
+\item Une spécification simple est une machine abstraite
+\item Une machine abstraite décrit :
+\begin{itemize}
+\item L'état du système modélisé (variables typées)
+\item Certaines de ses propriétés (invariant)
+\item Les services qu'il offre (opérations)
+\end{itemize}
+\item La vérification (preuve) assure que les services satisfont les
+propriétés
+\item Les preuves démontrent la préservation d'un invariant
+\item Les preuves s'effectuent par calcul des plus faibles préconditions
+(calcul des substitutions)
+\end{itemize}
+\end{frame}
 
 \section{Modélisation en méthode B}
 \subsection{Les machines abstraites}
@@ -183,7 +202,7 @@ Le langage $B_0$ est un sous langage de la méthode B qui est directement tradui
 
 \pause
 
-Un certain nombre de restrictions :
+On impose un certain nombre de restrictions :
 \begin{itemize}
 \item aucune précondition
 \item que des substitutions déterministes ( $:=$, \textsc{IF}, ";" par exemple)
@@ -191,6 +210,11 @@ Un certain nombre de restrictions :
 \item la terminaison et la correction des boucles doit être prouvée par l'utilisation d'invariants et de variants
 \end{itemize}
 
+\end{frame}
+
+\begin{frame}
+\frametitle{Implémentations}
+\framesubtitle{Un exemple}
 \end{frame}
 
 \section{Preuve de propriétés}
@@ -218,6 +242,18 @@ Si l'état satisfait wp(S, Q) avant S alors S termine et l'état satisfait Q apr
 On le note sous la forme de la substitution $[S]Q$.
 \end{itemize}
 \end{frame}
+
+\begin{frame}
+En résumé, le processus de raffinage consiste à :
+\begin{itemize}
+\item réduire l'indéterminisme
+\item affaiblir les préconditions
+\item renforcer les gardes
+\item s'approcher de la machine concrète avec introduction u séquencement et de la boucle
+on prouve que le raffinage se fait en respectant les fonctionnalités
+\end{itemize}
+\end{frame}
+
 
 \iffalse
 \subsection{Raffinement}
