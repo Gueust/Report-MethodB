@@ -20,6 +20,7 @@
 
 %\usepackage{calc}
 \usepackage{amsthm}
+\usepackage{booktabs}
 %\usepackage[usenames,dvipsnames]{xcolor}
 %\usepackage{tikz}
 %\usepackage[all]{xy}
@@ -67,12 +68,16 @@
 \usepackage{wrapfig}
 
 \newcommand{\Bequal}{\mathrel{\widehat{=}}}
-
+\def\p#1{\mathrel{\ooalign{\hfil$\mapstochar\mkern 5mu$\hfil\cr$#1$}}}
+\def\f#1{\mathrel{\ooalign{\hfil
+    $\mapstochar\mkern 3mu\mapstochar\mkern 5mu$\hfil\cr$#1$}}}
+\def \pfun  {\p\rightarrow}
 %\renewcommand{\thechapter}{\Roman{chapter})}
 %\renewcommand{\thesection}{\Roman{section}} %Alph
 %\renewcommand{\thesubsection}{\arabic{subsection})}
 %\renewcommand{\thesubsubsection}{\alph{subsubsection})}
 %\renewcommand{\theparagraph}{\engrec{paragraph})}
+
 \begin{document}
 \maketitle
 
@@ -118,7 +123,7 @@ La méthode B c'est :
 \item une théorie mathématique basée sur la théorie des ensembles et des relations~;
 \item une méthode pour spécifier, concevoir et implémenter des logiciels~;
 \item un langage~;
-\item un ensemble d'outils dont le principal est l'Atelier B\footnote{\url{http://www.methode-b.com/}} (développé par la société ClearSy). Il existe également d'autres produits comme B-Toolkit ainsi que des logiciels libres mais bien moins aboutis (comme B4free\footnote{\url{http://www.b4free.com/}} ou ABTools\footnote{\url{http://sourceforge.net/projects/abtools/}}).
+\item un ensemble d'outils dont le principal est l'Atelier B\footnote{\url{http://www.methode-b.com/}} (développé par la société ClearSy). Il existe également d'autres produits comme le B-Toolkit ainsi que des logiciels libres mais bien moins aboutis (comme B4free\footnote{\url{http://www.b4free.com/}} ou ABTools\footnote{\url{http://sourceforge.net/projects/abtools/}}).
 \end{itemize}
 ~
 
@@ -150,7 +155,7 @@ Cependant, la théorie des ensembles utilisée dans B est une théorie simplifi�
 \end{itemize}~
 De plus, l'axiome de la paire est modifié pour construire une paire ordonnée et non un ensemble. 
 
-Cela donne ainsi l'axiomatique:
+Cela donne ainsi l'axiomatique suivante :
 \begin{description}
 \item[Définition de la paire] $(E, F) \in s \times t \Leftrightarrow E \in s \wedge F \in t$
 \item[Ensemble des parties] $s \in \mathbb{P}(t) \Leftrightarrow \forall x (x \in s \Rightarrow x \in t)$
@@ -167,7 +172,7 @@ Sans en détailler ici toutes les implications, il est toutefois important de re
 
 \subsection{Langage de substitution généralisée}
 
-Un triplet $ \{P\}\;S\;\{Q\} $ est à interpréter dans la logique de Hoare de la façon suivante : si la propriété $P$ est vraie et qu'on exécute le code $S$, alors si $S$ termine on a la propriété $Q$. En particulier, si on n'a pas de garantie sur la terminaison de l'instruction $S$ on parle de correction partielle. La propriété $P$ est appelée précondition et $Q$ postcondition. Les axiomes de la logique de Hoare sont donnés en~\cref{Hoare}.
+Un triplet $ \{P\}\;S\;\{Q\} $ est à interpréter dans la logique de Hoare de la façon suivante : si la propriété $P$ est vraie et qu'on exécute le code $S$, alors si $S$ termine on a la propriété $Q$. En particulier, si on n'a pas de garantie sur la terminaison de l'instruction $S$ on parle de correction partielle. Si on sait que S termine, on parle alors de correction totale. La propriété $P$ est appelée précondition et $Q$ postcondition. Les axiomes de la logique de Hoare sont donnés en~\cref{Hoare}.
 
 Pour un prédicat $Q$ et une exécution $S$, on définie la plus faible précondition $wp(S, Q)$ (\emph{wp} pour weakest precondition) telle que :
 \begin{itemize}
@@ -175,7 +180,7 @@ Pour un prédicat $Q$ et une exécution $S$, on définie la plus faible précond
 \item $wp(S, Q)$  est la plus faible précondition : si $\{ P \} S \{ Q \}$ alors $P \Rightarrow wp(S, Q)$.
 \end{itemize}~
 
-En B on utilise la notation $[S]Q$ au lieu de $wp(S, Q)$. On ne traitera pas ici de l'existence de la plus faible précondition mais la preuve se fait par induction structurelle\footnote{On pourra aller voir \url{http://www.lsv.ens-cachan.fr/~haddad/courstdagreg.pdf} pour une peuve complète.}. Voici la définition de certaines\footnote{La boucle n'a pas été définie par exemple.} substitutions généralisées\footnote{Les substitutions sont issus de \cite{habrias2006specifications} et \url{http://www.pps.univ-paris-diderot.fr/~eleph/Enseignement/2001-02/SCL/b.pdf}.} :
+En B on utilise la notation $[S]Q$ au lieu de $wp(S, Q)$. On ne traitera pas ici de l'existence de la plus faible précondition mais la preuve se fait par induction structurelle\footnote{On pourra aller voir \url{http://www.lsv.ens-cachan.fr/~haddad/courstdagreg.pdf} pour une peuve complète.}. Voici la définition de certaines\footnote{La boucle n'a pas été définie par exemple.} substitutions généralisées\footnote{Les substitutions sont issues de \cite{habrias2006specifications} et \url{http://www.pps.univ-paris-diderot.fr/~eleph/Enseignement/2001-02/SCL/b.pdf}.} :
 \begin{description}
 \item[Substitution simple] ~
 
@@ -206,7 +211,45 @@ $[\textsc{ANY } z \textsc{ WHERE } P \textsc{ THEN } S \textsc{ END}]I \Leftrigh
 
 \subsection{Relations et fonctions}
 
+\emph{En théorie des ensembles, les relations sont un cas particulier d'ensemble (des ensembles de paires) et les fonctions sont un cas particulier de relations. Cependant ces concepts essentiels bénéficient de notations spécifiques que nous décrivons ici.}\footnote{Ces définitions proviennent de \url{http://www-verimag.imag.fr/~potet/ejcp-expose.pdf}.}
+
 On note  $ s \leftrightarrow t \Bequal \mathbb{P}(s \times t)$ qui est l'ensemble des relations entre les éléments de $s$ et les éléments de $t$. De plus, une paire ordonnée $(x, y)$ est notée $x \mapsto y$.
+
+%\toprule, \midrule and \bottomrule.
+{\arraycolsep=1.4pt\def\arraystretch{2.2}
+\renewcommand{\arraystretch}{2}
+\begin{table}
+\centering
+\begin{tabular}[h]{|c | c | c|}
+\hline
+\bf Condition & \bf Expression &  \bf Définition \tabularnewline
+\hline 
+$r \in s \leftrightarrow t$ & dom($r$) & $\{ x~|~x\in s \wedge \exists y~(y \in t \wedge (x, y)  \in r)\}$  \tabularnewline
+$r \in s \leftrightarrow t$ & ran($r$) & $\{y~|~y \in t \wedge \exists x~(x \in s \wedge (x, y) \in r)\}$ \tabularnewline
+$r \in s \leftrightarrow t$ & $r^{-1}$ & $\{(y, x)~|~(y, x) \in t \times s \wedge (x, y) \in r\}$ \tabularnewline
+\hline
+\end{tabular}
+\caption{Quelques opérateurs sur les relations}
+\end{table}
+}
+
+{\arraycolsep=1.4pt\def\arraystretch{2.2}
+\renewcommand{\arraystretch}{2}
+\begin{table}
+\centering
+\begin{tabular}[h]{|c | c | c|}
+\hline
+\bf Sens & \bf Notation &  \bf Définition \tabularnewline
+\hline 
+Fonction partielle & $r \in s \pfun t$ & $\{ r~|~r \in s \leftrightarrow t \wedge \forall x, y, z~(x,y \in r \wedge x,z \in r \Rightarrow y=z )\}$  \tabularnewline
+Fonction totale &  $r \in s \rightarrow t$ & $\{f~|~f \in s \pfun t \wedge \text{ dom}(f) = s\}$ \tabularnewline
+Fonction injective partielle & $s \p\rightarrowtail t$ & $\{f~|~f \in s \pfun t \wedge f^{-1} \in  t \pfun s\}$ \tabularnewline
+Fonction injective totale & $s \rightarrowtail t$ & $s \p\rightarrowtail t \cap s \rightarrow t$ \tabularnewline 
+\hline
+\end{tabular}
+\caption{Les fonctions sont des cas particuliers de relations}
+\end{table}
+}
 
 \section{Machines abstraites}
 
