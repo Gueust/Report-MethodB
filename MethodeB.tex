@@ -381,7 +381,7 @@ Et voici maintenant la partie dynamique : la clause d'opérations.
 \indent \textbf{END} \tabularnewline
 \textbf{END};
 \end{longtable}
-
+\ \\ 
 \indent emprunter(\emph{aa}, \emph{ll}) $\doteq$
 \begin{longtable}{lll}
 \textbf{PRE} \tabularnewline
@@ -419,11 +419,11 @@ $y \leftarrow op(x) \Bequal$ \newline
 \label{M1}
 \end{wrapfigure}
 
-Pour prouver une opération dans une machine, il faut que son initialisation établisse l'invariant et que son exécution le conserve. Il faut donc vérifier que l'initialisation et l'opération elle-même respectent la propriété invariante de l'opération. Les invariants sont notés dans la clause INVARIANT de la machine abstraite. \\
+Pour prouver une opération dans une machine, il faut que son initialisation établisse l'invariant et que son exécution le conserve. Il faut donc vérifier que l'initialisation et l'opération elle-même respectent la propriété invariante de l'opération. Les invariants, rappelons-le, sont notés dans la clause INVARIANT de la machine abstraite. \\
 
 Formellement, pour une machine telle que celle représentée par la~\cref{M1}, il faut faire les vérifications suivantes :
 \begin{description}
-\item[L'initialisation établie l'invariant] $L[I]$ 
+\item[L'initialisation établit l'invariant] $L[I]$ 
 \item[Les opérations conservent l'invariant] $I \wedge P \Rightarrow [S]I$ 
 \end{description}
 
@@ -436,6 +436,27 @@ Formellement, pour une machine telle que celle représentée par la~\cref{M1}, i
 \begin{minipage}[l]{0.30\linewidth}
 \end{minipage}
 \fi
+
+Reprenons l'exemple de la bilbiothèque, et montrons la correction de l'opération \emph{emprunter}.
+
+Que doit-on prouver ? Ici, les invariants potentiellement affectés \textbf{a posteriori} par l'opération sont :\\ \\
+emprunt $\in$ exemplaire $\nrightarrow$ abonne\\
+et \\
+$\forall$ ab\ (\ ab $\in$ abonne $\Rightarrow$ (\ \textbf{card}\ (\ emprunt $^{-1}$[\{ab\}] $\leq$ maxi\ )) (*)\\
+
+\noindent Mais, étant des invariants, ces propriétés sont vérifiées \textbf{a priori} au moment de réaliser l'opération. D'autres part, l'opération ne démarre que si ses préconditions sont vérifiées :\\
+\emph{aa} $\in$ abonne \\ 
+\emph{ll} $\in$ livre \\
+$\exists$ \emph{nn}.\ (\emph{nn} $\in$ N1 $\wedge$ \emph{ll} $\mapsto$ \emph{nn} $\in$ exemplaire $\wedge$ \emph{ll} $\mapsto$ \emph{nn} $\notin$ dom(emprunt)) \\
+\textbf{card}(emprunt $^{-1}$[$\{$ab$\}$] $<$ maxi) (1)\\
+
+Comme\\
+exemplaire $\in$ livre $\leftrightarrow$ N1\\
+L'opération\\
+emprunt := emprunt $\cup$ \{(\emph{ll} $\mapsto$ \emph{nn}) $\mapsto$ \emph{aa})\}\\
+conserve trivialement l'invariant\\
+emprunt $\in$ exemplaire $\nrightarrow$ abonne\\
+De plus avec (1) (et son inégalité stricte) (*) est clairement conservé aussi.
 
 
 \section{Raffinement}
