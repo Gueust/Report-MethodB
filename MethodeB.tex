@@ -366,7 +366,7 @@ $emprunt := \emptyset$ &
 
 \subsubsection{La machine abstraite, partie dynamique}
 
-Et voici maintenant la partie dynamique : la clause d'opérations.
+Et voici maintenant la partie dynamique : la clause d'opérations. On spécifie ici trois opérations, qui s'expliquent d'elles mêmes sur le fond.
 \\
 \\
 \noindent \textbf{OPERATIONS}\\ \\
@@ -390,6 +390,21 @@ Et voici maintenant la partie dynamique : la clause d'opérations.
 \indent $\exists$ \emph{nn}.\ (\emph{nn} $\in$ N1 $\wedge$ \emph{ll} $\mapsto$ \emph{nn} $\in$ exemplaire $\wedge$ \emph{ll} $\mapsto$ \emph{nn} $\notin$ dom(emprunt)) & $\wedge$ \tabularnewline
 \indent \textbf{card}(emprunt $^{-1}$[$\{$ab$\}$] $<$ maxi) \tabularnewline
 \textbf{THEN} \tabularnewline \indent emprunt := emprunt $\cup$ \{(\emph{ll} $\mapsto$ \emph{nn}) $\mapsto$ \emph{aa})\} \tabularnewline
+\textbf{END} \tabularnewline
+\end{longtable}
+\ \\ 
+\indent retourner(\emph{aa}, \emph{ll}) $\doteq$
+\begin{longtable}{lll}
+\textbf{PRE} \tabularnewline
+\indent \emph{aa} $\in$ abonne & $\wedge$ \tabularnewline 
+\indent \emph{ll} $\in$ livre & $\wedge$ \tabularnewline
+\indent $\exists$ \emph{nn}.\ (\emph{nn} $\in$ N1 $\wedge$ \emph{ll} $\mapsto$ \emph{nn} $\in$ exemplaire $\wedge$ (\emph{ll} $\mapsto$ \emph{nn}) $\mapsto$ \emph{aa} $\in$ emprunt )\tabularnewline
+\textbf{THEN} \tabularnewline
+\indent \textbf{ANY} \emph{nn} \textbf{WHERE} \tabularnewline
+\indent \indent \emph{nn} $\in$ N1 $\wedge$ $\mapsto$ \emph{nn} $\in$ exemplaire & $\wedge$ \tabularnewline
+\indent \indent (\emph{ll} $\mapsto$ \emph{nn}) $\mapsto$ \emph{aa} $\in$ emprunt \tabularnewline
+\indent \textbf{THEN} \tabularnewline
+\indent \indent emprunt := emprunt -- \{(\emph{ll} $\mapsto$ \emph{nn}) $\mapsto$ \emph{aa})\} \tabularnewline
 \textbf{END} \tabularnewline
 \end{longtable}
 
