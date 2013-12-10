@@ -100,24 +100,77 @@
 
 \begin{frame}
 \frametitle{Introduction}
-%\framesubtitle{DTA overview}
-La méthode B, inventé par Jean-Raymond Abrial, est langage unique permettant de :
+\framesubtitle{Qu'est-ce que la méthode B ?}
+La méthode B, inventée par Jean-Raymond Abrial, c'est :\\~\\
 \begin{itemize}
-\item Spécifier formellement
-\item Raffiner ces spécifications
-\item Aboutir à une implémentation
-\end{itemize}
-
 \pause
-~\newline
-L'Atelier B (ClearSy) permet d'encadrer le processus industriel :
+\item Un langage (le langage B)\\~\\
+\pause
+\item Un outil (l'Atelier B)\\~\\
+\pause
+\item Une méthode (la méthode B)
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Introduction}
+\framesubtitle{À quoi sert ... le langage B ?}
+B est un langage unique pour :\\~\\
+\pause
 \begin{itemize}
-\item un analyseur~;
-\item un générateur d'obligation de preuve~;
-\item un démonstrateur automatique~;
-\item un démonstrateur interactif~;
-\item un générateur de code C et Ada~;
+\item Spécifier formellement des fonctionnalités du logiciel
+\pause
+\item Spécifier formellement des propriétés du logiciel
+\pause
+\end{itemize}
+~\\
+Et ce à tout niveau d'abstraction.
+\end{frame}
+
+\begin{frame}
+\frametitle{Introduction}
+\framesubtitle{À quoi sert ... l'Atelier B ?}
+L'Atelier B (ClearSy) est l'outil principal où l'on écrit du B et où on le vérifie. Il est donc au coeur de la méthode B.\\~\\
+\pause
+Il comprend :
+\begin{itemize}
+\item un analyseur
+\pause
+\item un générateur d'obligation de preuve
+\pause
+\item un démonstrateur automatique
+\pause
+\item un démonstrateur interactif
+\pause
+\item un générateur de code C et Ada
+\pause
 \item un gestionnaire de projet...
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Introduction}
+\framesubtitle{À quoi sert ... la méthode B ?}
+La méthode B, enfin, encadre le processus industriel.\\~\\~\pause
+C'est une méthode formelle par laquelle on peut :\pause
+\begin{itemize}
+\item Énoncer en B les fonctionnalité du logiciel en développement
+\pause
+\item Les raffiner (concrétiser) jusqu'à obtenir une implémentation
+\pause
+\end{itemize}
+Et en même temps :\pause
+\begin{itemize}
+\item Énoncer en B des propriétés sur le logiciel en développement
+\pause
+\item Les vérifier lors du développement (du raffinement) dans l'Atelier B
+\pause
+\end{itemize}
+Pour enfin :
+\begin{itemize}
+\item Générer du code fonctionnel (en un langage compilable ``classique'') ...
+\pause
+\item ... qui vérifie par construction les propriétés voulues !
 \end{itemize}
 \end{frame}
 

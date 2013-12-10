@@ -676,6 +676,14 @@ vu en B classique, complétée par deux autres preuves : la preuve
 de faisabilité et la preuve de vivacité.\cite{dossierTechnique}
 \fi
 
+\section{Vers l'utilisation de B événementiel pour les modèles continus}
+
+B événementiel est utilisé, nous l'avons vu, pour les systèmes à transitions, donc discrets. Mais beaucoup de systèmes incluent des parties continues, en particulier, des boucles de contrôle avec des actuateurs à action continue (un moteur, des capteurs analogiques ...). Même si le fonctionnement interne de ces composants est souvent numérisé, ce sot néanmoins des fonctions qiu varient continuement, à chaque temps d'horloge. De surcroît le phénomène qu'ils créent ou observe est lui continu (du moins le modèle le plus fiable de ces composants est-il continu à l'échelle macroscopique). Et enfin, c'est souvent dans ces composants que se situe l'éventuel danger pour les personnes.
+
+Richard Banach et Michael Butler, de l'université de Manchester, ont donc essayé de concevoir ce qu'ils ont appelé "B événement hybride" (\cite{hevB}). Ils ont pris comme cas d'étude un problème d'actualité : le centrage d'une voiture dans une file d'une voie (lane centering en Anglais), en décalage tant latéral qu'angulaire.
+
+Le cœur de leur méthode est en fait continu, et les opérations discrètes sont vues comme des cas particuliers d'opérations continues. Néanmoins, les systèmes sont quand même modélisés à partir de machines à états/événements, venant de B événement. La différenciation entre événements discrets et continues est faite à l'aide d'une clause 'STATUS' qui spécifie \emph{pliant} pour les évènements continus de machines abstraites et \emph{ordinary} pour les autres. Ils ont de surcroît rajouté une clause 'COMPLY' pour spécifier les contraintes sur l'évènement : on peut mettre une équation différentielle (qu'il faudra préciser dans une clause 'SOLVE'), des invariants classiques, et d'autres types de contraintes continues (variation monotone, convexe, concave, contraintes à l'arrivée et au départ ...).
+
 \appendix
 
 \section{Théorie ZFC}
