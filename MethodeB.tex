@@ -360,7 +360,7 @@ Nous allons modéliser en B une bibliothèque.
 
 Celle-ci gère des livres, des exemplaires de livres et des abonnés : ce sont les types de données (en plus des types communs, dont les entiers qui nous seront utiles).
 
-Les règles de la bilbiothèque sont les suivantes : un exemplaire est emprunté par au plus un abonné, et un abonné ne peut emprunter plus d'une certaine limite d'exemplaire. Ce sont les invariants de notre bibliothèque.
+Les règles de la bilbiothèque sont les suivantes : un exemplaire est emprunté par au plus un abonné, et un abonné ne peut emprunter plus d'une certaine limite d'exemplaires. Ce sont les invariants de notre bibliothèque.
 
 On peut dans cette bilbiothèque créer des livres ou des exemplaires de livres, et en prêter à des abonnés qui les empruntent. Ce sont nos opérations.
 
@@ -391,20 +391,19 @@ $\forall ab\ (\ ab \in abonne \Rightarrow (\ \textbf{card}\ (\ emprunt ^{-1}[\{a
 \end{longtable}
 \noindent\textbf{INITIALISATION}
 \begin{longtable}{ll}
-$livre := \emptyset$ & $||$ \tabularnewline
-$exemplaire := \emptyset$ & $||$ \tabularnewline
-$abonne := \emptyset$ & $||$ \tabularnewline
-$emprunt := \emptyset$ &
+$livre := \{Oui-Oui,\ Comment\ Mourir,\ Le\ Code\ Civil\} $& $||$ \tabularnewline
+$exemplaire := \{1 \mapsto Oui-Oui,\ 2 \mapsto Oui-Oui,\ 1 \mapsto Comment\ Mourir\}$ & $||$ \tabularnewline
+$abonne := \{Jean\ Dupont,\ Blob\ Duchmol,\ Pierre\ Smash\} $& $||$ \tabularnewline
+$emprunt := \{Pierre\ Smash \mapsto ( 2 \mapsto Oui-Oui)\ \}$ &
 \end{longtable}
 
 \subsubsection{La machine abstraite, partie dynamique}
 
 Et voici maintenant la partie dynamique : la clause d'opérations. On spécifie ici trois opérations, qui s'expliquent d'elles mêmes sur le fond.
-Remarquons ici 
 \\
 \\
 \noindent \textbf{OPERATIONS}\\ \\
-\indent lr $\leftarrow$ creer\_Livre $\doteq$
+\indent lr $\leftarrow$ creer\_Livre $\Bequal$
 \begin{longtable}{ll} \textbf{PRE} \tabularnewline
 \indent LIVRE\ \textbackslash \ livre $\neq$ $\emptyset$ \tabularnewline
 \textbf{THEN} \tabularnewline
@@ -416,7 +415,7 @@ Remarquons ici
 \textbf{END};
 \end{longtable}
 \ \\ 
-\indent emprunter(\emph{aa}, \emph{ll}) $\doteq$
+\indent emprunter(\emph{aa}, \emph{ll}) $\Bequal$
 \begin{longtable}{lll}
 \textbf{PRE} \tabularnewline
 \indent \emph{aa} $\in$ abonne & $\wedge$ \tabularnewline 

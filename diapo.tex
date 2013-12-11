@@ -101,6 +101,9 @@
 \begin{frame}
 \frametitle{Introduction}
 \framesubtitle{Qu'est-ce que la méthode B ?}
+\begin{figure}[h]
+\includegraphics[scale=0.2]{ressources/logo1.png}
+\end{figure}
 La méthode B, inventée par Jean-Raymond Abrial, c'est :\\~\\
 \begin{itemize}
 \pause
@@ -132,8 +135,9 @@ Et ce à tout niveau d'abstraction.
 \framesubtitle{À quoi sert ... l'Atelier B ?}
 \begin{figure}[h]
 \centering
-\includegraphics[scale=0.33]{ressources/logo.png}
+\includegraphics[scale=0.2]{ressources/logo.png}
 \end{figure}
+\pause
 L'Atelier B (ClearSy) est l'outil principal où l'on écrit du B et où on le vérifie. Il est donc au coeur de la méthode B.\\~\\
 \pause
 Il comprend :
@@ -155,10 +159,6 @@ Il comprend :
 \begin{frame}
 \frametitle{Introduction}
 \framesubtitle{À quoi sert ... la méthode B ?}
-\begin{figure}[h]
-\centering
-\includegraphics[scale=0.33]{ressources/logo1.png}
-\end{figure}
 La méthode B, enfin, encadre le processus industriel.\\~\\~\pause
 C'est une méthode formelle par laquelle on peut :\pause
 \begin{itemize}
@@ -182,16 +182,6 @@ Pour enfin :
 \end{itemize}
 \end{frame}
 
-
-\begin{frame}
-\frametitle{Introduction} \iffalse TODO Introduction ? Ou plus tard ? \fi
-\framesubtitle{Cycle de développement formel vs cycle conventionnel}
-\begin{figure}[h]
-\centering
-\includegraphics[scale=0.33]{ressources/formal_dev.png}
-\end{figure}
-\end{frame}
-
 %
 % Plan
 %
@@ -202,6 +192,8 @@ Pour enfin :
 \begin{frame}
 \frametitle{Modélisation formelle}
 \framesubtitle{Théorie des ensembles}
+Pour spécifier formellement des propriétés, on utilise la théorie des ensembles dans le cadre ZFC.
+\\~\pause
 \begin{description}
 \item[Définition de la paire] $(E, F) \in s \times t \Leftrightarrow E \in s \wedge F \in t$
 \item[Ensemble des parties] $s \in \mathbb{P}(t) \Leftrightarrow \forall x (x \in s \Rightarrow x \in t)$
@@ -210,6 +202,21 @@ Pour enfin :
 \item[Axiome du choix] $\exists x  (x \in s) \Rightarrow choice(s) \in s$
 \item[Axiome de l'infini] Existence d'un ensemble infini nommé BIG
 \end{description}
+\end{frame}
+
+\subsection{Substitutions généralisées}
+\begin{frame}
+\frametitle{Modélisation formelle}
+\framesubtitle{Substitutions généralisées}
+Pour spécifier formellement des opérations, on utilise les substitutions généralisées.
+\\~\pause
+Une substitution remplace des éléments par des expressions dans une propriété :\\[5pt]
+[x := E](A $\wedge$ x) $\Leftrightarrow$ A $\wedge$ E\\[5pt]
+[n := n+1](n $\leq$ max) (itération de boucle)
+\\[10pt]~\pause
+Si l'on veut s'assurer qu'une propriété P est vérifiée après avoir appliqué une substitution S, il faut qu'avant l'application de S, une précondition minimale soit vérifiée, notée [S]P.\pause Par exemple :\\[5pt]
+\indent[n := n+1](n $\leq$ max) $\Leftrightarrow$ n $\leq$ max\ -\ 1\pause\\
+\indent[n := n+1](n $\leq$ max $\wedge$ n $\in$ $\mathbb{N}$) $\Leftrightarrow$ n $<$ max
 \end{frame}
 
 \begin{frame}
@@ -233,29 +240,220 @@ propriétés
 \end{itemize}
 \end{frame}
 
-\section{Modélisation en méthode B}
+\section{Modélisation en B}
+\subsection{Généralités}
+\begin{frame}
+\frametitle{Modélisation en B}
+\framesubtitle{Généralités}
+On \emph{modélise} un futur logiciel ou un système en B avec des machines abstraites.\\[5pt]~\pause
+Ces machines spécifient\pause
+\begin{itemize}
+\item des propriétés (potentiellement abstraites)
+\pause
+\item des opérations (qui conservent ces propriétés).
+\pause
+\end{itemize}
+~\\[0pt]
+La correction des opérations (les \emph{obligations de preuves}) est vérifiée dans l'Atelier B à l'aide du démonstrateur.\pause\\[5pt]
+Ces machines peuvent être concrétisées (on dit: \emph{raffinées}) jusqu'à une \emph{implémentation}.
+\end{frame}
+
 \subsection{Les machines abstraites}
 \begin{frame}
 \frametitle{Les machines abstraites}
-\framesubtitle{Un exemple}
+\framesubtitle{Éléments}
+Une machine abstraite spécifie au moins :
+\begin{itemize}
+\pause
+\item Un nom
+\pause
+\item Des ensembles de travail
+\pause
+\item Des constantes et variables
+\pause
+\item Des propriétés et invariants
+\pause
+\item Des opérations
+\end{itemize}
+\end{frame}
 
+\begin{frame}
+\frametitle{Les machines abstraites}
+\framesubtitle{Un exemple}
+Spécifions une bibliothèque où il y a des livres (concept abstrait), des exemplaires, et des abonnés.\\\iffalse\fi\pause
+On peut créer un nouveau livre, \pause en emprunter un exemplaire, \pause et en rendre un.
+\\\iffalse\fi\pause Seuls les abonnés ont accès à ces services.
+\\\iffalse\fi\pause Il peut y avoir plusieurs exemplaires d'un même livre.
+\\\iffalse\fi\pause Il y a une limite au nombre d'emprunts par abonnés.
+\\~\\\iffalse\fi\pause Ceci est une spécification en langage naturel.
+\end{frame}
+
+\begin{frame}
+\frametitle{Les machines abstraites}
+\framesubtitle{Un exemple}
+\setlength{\LTpre}{\medskipamount}
+\setlength{\LTpost}{0pt}
+\setlength\LTleft{\parindent}
+\textbf{MACHINE}
+\begin{longtable}{ll} BIBLIOTHEQUE (maxi) \end{longtable}
+\noindent\textbf{CONSTRAINTS}
+\begin{longtable}{ll} maxi $\in$ N1 \end{longtable}
+\noindent\textbf{SETS}
+\begin{longtable}{ll} LIVRES; \\ PERSONNES\\ \end{longtable}
+\noindent\textbf{VARIABLES}
+\begin{longtable}{ll} livre , exemplaire , abonne , emprunt \end{longtable}
+\noindent\textbf{INVARIANTS}
+\begin{longtable}{ll}
+$livre \subseteq LIVRE $ & $\wedge$ \tabularnewline
+$abonne \subseteq PERSONNE$ & $\wedge$ \tabularnewline
+$exemplaire \in livre \leftrightarrow N1$ & $\wedge$ \tabularnewline
+$emprunt \in ( exemplaire \nrightarrow abonne )$ & $\wedge$ \tabularnewline
+$\forall ab\ (\ ab \in abonne \Rightarrow (\ \textbf{card}\ (\ emprunt ^{-1}[\{ab\}] \leq maxi\ ))$ &
+\end{longtable}
+\end{frame}
+
+\begin{frame}
+\frametitle{Les machines abstraites}
+\framesubtitle{Un exemple}
+\noindent\textbf{INITIALISATION}
+\begin{longtable}{ll}
+$livre := \{Oui-Oui,\ Comment\ Mourir,\ Le\ Code\ Civil\} $& $||$ \tabularnewline
+$exemplaire := \{1 \mapsto Oui-Oui,\ 2 \mapsto Oui-Oui,\ 1 \mapsto Comment\ Mourir\}$ & $||$ \tabularnewline
+$abonne := \{Jean\ Dupont,\ Blob\ Duchmol,\ Pierre\ Smash\} $& $||$ \tabularnewline
+$emprunt := \{Pierre\ Smash \mapsto ( 2 \mapsto Oui-Oui)\ \}$ &
+\end{longtable}
+\end{frame}
+
+\begin{frame}
+\frametitle{Les machines abstraites}
+\framesubtitle{Un exemple}
+\noindent \textbf{OPERATIONS}\\~\\
+\indent lr $\leftarrow$ creer\_Livre $\doteq$
+\begin{longtable}{ll}\textbf{PRE} \tabularnewline
+~~~~~ LIVRE\ \textbackslash \ livre $\neq$ $\emptyset$ \tabularnewline
+\textbf{THEN} \tabularnewline
+~~~~~ \textbf{ANY} \emph{ll} \textbf{WHERE} \tabularnewline ~~~~~ ~~~~~ \emph{ll} $\in$ LIVRE\ \textbackslash \ livre \tabularnewline
+~~~~~ \textbf{THEN} \tabularnewline
+~~~~~ ~~~~~ livre := livre $\cup$ \{\emph{ll}\} $||$ \tabularnewline
+~~~~~ ~~~~~ lr := \emph{ll} \tabularnewline
+~~~~~ \textbf{END} \tabularnewline
+\textbf{END};
+\end{longtable}
+\end{frame}
+
+\begin{frame}
+\frametitle{Les machines abstraites}
+\framesubtitle{Un exemple}
+\indent emprunter(\emph{aa}, \emph{ll}) $\doteq$
+\begin{longtable}{lll}
+\textbf{PRE} \tabularnewline
+~~~~ \emph{aa} $\in$ abonne & $\wedge$ \tabularnewline 
+~~~~ \emph{ll} $\in$ livre & $\wedge$ \tabularnewline
+~~~~ $\exists$ \emph{nn}.\ (\emph{nn} $\in$ N1 $\wedge$ \emph{ll} $\mapsto$ \emph{nn} $\in$ exemplaire $\wedge$ \emph{ll} $\mapsto$ \emph{nn} $\notin$ dom(emprunt)) & $\wedge$ \tabularnewline
+~~~~ \textbf{card}(emprunt $^{-1}$[$\{$ab$\}$] $<$ maxi) \tabularnewline
+\textbf{THEN} \tabularnewline ~~~~ emprunt := emprunt $\cup$ \{(\emph{ll} $\mapsto$ \emph{nn}) $\mapsto$ \emph{aa})\} \tabularnewline
+\textbf{END} \tabularnewline
+\end{longtable}
+\end{frame}
+
+\begin{frame}
+\frametitle{Les machines abstraites}
+\framesubtitle{Un exemple}
+\indent retourner(\emph{aa}, \emph{ll}) $\doteq$
+\begin{longtable}{lll}
+\textbf{PRE} \tabularnewline
+~~~~ \emph{aa} $\in$ abonne & $\wedge$ \tabularnewline 
+~~~~ \emph{ll} $\in$ livre & $\wedge$ \tabularnewline
+~~~~ $\exists$ \emph{nn}.\ (\emph{nn} $\in$ N1 $\wedge$ \emph{ll} $\mapsto$ \emph{nn} $\in$ exemplaire $\wedge$ (\emph{ll} $\mapsto$ \emph{nn}) $\mapsto$ \emph{aa} $\in$ emprunt )\tabularnewline
+\textbf{THEN} \tabularnewline
+~~~~ \textbf{ANY} \emph{nn} \textbf{WHERE} \tabularnewline
+~~~~ ~~~~ \emph{nn} $\in$ N1 $\wedge$ $\mapsto$ \emph{nn} $\in$ exemplaire & $\wedge$ \tabularnewline
+~~~~ ~~~~ (\emph{ll} $\mapsto$ \emph{nn}) $\mapsto$ \emph{aa} $\in$ emprunt \tabularnewline
+~~~~ \textbf{THEN} \tabularnewline
+~~~~ ~~~~ emprunt := emprunt -- \{(\emph{ll} $\mapsto$ \emph{nn}) $\mapsto$ \emph{aa})\} \tabularnewline
+\textbf{END} \tabularnewline
+\end{longtable}
 \end{frame}
 
 \subsection{Le raffinement de machines}
 \begin{frame}
 \frametitle{Le raffinement de machines}
+\framesubtitle{Les bases}
 Le raffinement est le fait de transformer une spécification abstraite en un texte plus proche de la programmation, pour finalement obtenir un programme.
 
 En pratique il s'agit de :
 \begin{itemize}
+\pause
 \item Reformulation en fonction du changement d’état
+\pause
 \item Affaiblissement des préconditions
+\pause
+\item Concrétisation du typage
+\pause
 \item Réduction du non-déterminisme
 \end{itemize}
-
+\pause
+Tout en gardant bien sûr les invariants au long des opérations. Or on a modifié les opérations, en les remplaçant par des raffinements : ainsi, il faut que les invariants et les éventuelles préconditions impliquent la plus petite précondition des nouvelles substitiutions, telles qu'à la fin les invariants soient encore vérifiés.
 \end{frame}
 
+\subsection{Le raffinement de machines}
+\begin{frame}
+\frametitle{Le raffinement de machines}
+\framesubtitle{Les bases}
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.25]{ressources/cond.png}
+\end{figure}
+\end{frame}
 
+\begin{frame}
+\frametitle{Le raffinement des machines}
+\framesubtitle{Un exemple simple}
+\noindent \textbf{MACHINE} utils \\
+\textbf{CONSTANTS} $t,n$ \\
+\textbf{OPERATIONS} \\
+$res \leftarrow mini(x, y) \doteq$ \\
+\hspace*{1em}  \textbf{PRE} $x \in \mathbb{N} \wedge  y \in \mathbb{N} $ \textbf{THEN} \\
+\hspace*{2em} res := min(\{x, y\})  \\
+\hspace*{1em} \textbf{END} \\
+$res \leftarrow maxi(x, y, z) \doteq$ \\
+\hspace*{1em}  \textbf{PRE} $x \in \mathbb{N} \wedge  y \in \mathbb{N} \wedge z \in \mathbb{N}$ \textbf{THEN} \\
+\hspace*{2em} res := max(\{x, y, z\})  \\
+\hspace*{1em} \textbf{END} \\
+\textbf{END}
+\end{frame}
+
+\begin{frame}
+\frametitle{Le raffinement des machines}
+\framesubtitle{Un exemple simple}
+\noindent \textbf{IMPLEMENTATION}  utils\_i \\
+\textbf{REFINES} utils
+\textbf{OPERATIONS} \\
+$res \leftarrow mini ( x , y ) =$ \\
+\hspace*{1em}    \textbf{IF}  $x \geq y$ \textbf{THEN} \\
+\hspace*{2em}        res:= yy \\
+\hspace*{1em}    \textbf{ELSE} \\
+\hspace*{2em}        res := xx \\
+\hspace*{1em}    \textbf{END}; \\
+\end{frame}
+
+\begin{frame}
+\frametitle{Le raffinement des machines}
+\framesubtitle{Un exemple simple}
+$res \leftarrow maxi ( xx , yy , zz ) = $ \\
+\hspace*{1em}    \textbf{BEGIN} \\
+\hspace*{1em}    \textbf{IF} $xx \geq yy$ \textbf{THEN} \\
+\hspace*{2em}        res := xx \\
+\hspace*{1em}    \textbf{END}; \\
+\hspace*{1em}   \textbf{IF} $xx \leq yy$  \textbf{THEN} \\
+\hspace*{2em}        res := yy \\
+\hspace*{1em}    \textbf{END}; \\
+\hspace*{1em}   \textbf{IF} $res \leq zz$ \textbf{THEN} \\
+\hspace*{2em}        res := zz \\
+\hspace*{1em}    \textbf{END} \\
+\hspace*{1em}    \textbf{END} \\
+\textbf{END}
+\end{frame}
 
 \subsection{L'implémentation}
 \begin{frame}
@@ -267,18 +465,28 @@ Le langage $B_0$ est un sous langage de la méthode B qui est directement tradui
 On impose un certain nombre de restrictions :
 \begin{itemize}
 \item aucune précondition
-\item que des substitutions déterministes ( $:=$, \textsc{IF}, ";" par exemple)
+\pause
+\item que des substitutions déterministes ( $:=$, \textsc{IF}, ";" par exemple, mais de choix)
+\pause
 \item toutes les constantes et variables sont d'un type concret
+\pause
 \item la terminaison et la correction des boucles doit être prouvée par l'utilisation d'invariants et de variants
 \end{itemize}
+~\\~\\\pause
+La phase finale de la méthode B consiste en la génération de code prouvé.
 
 \end{frame}
 
 \begin{frame}
-\frametitle{Implémentations}
-\framesubtitle{Un exemple}
+\frametitle{La méthode B}
+\framesubtitle{Cycle de développement formel vs cycle conventionnel}
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.33]{ressources/formal_dev.png}
+\end{figure}
 \end{frame}
 
+\iffalse
 \section{Preuve de propriétés}
 \begin{frame}
 \frametitle{Preuve de programmes}
@@ -315,7 +523,7 @@ En résumé, le processus de raffinage consiste à :
 on prouve que le raffinage se fait en respectant les fonctionnalités
 \end{itemize}
 \end{frame}
-
+\fi
 
 \iffalse
 \subsection{Raffinement}
@@ -373,7 +581,7 @@ composants)
 
 \begin{frame}
 \frametitle{La méthode B événementielle}
-
+\framesubtitle Pour aller plus loin
 \end{frame}
 
 \end{document}
