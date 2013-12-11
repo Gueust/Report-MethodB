@@ -170,6 +170,7 @@ Cela donne ainsi l'axiomatique suivante :
 L'idée est que, lors de la preuve d'un prédicat ayant des variables liées à des quantificateurs, les variables liées sont supposées appartenir à un ensemble.
 Sans en détailler ici toutes les implications, il est toutefois important de remarquer que l'ajout de ces contraintes de type-checking rend l'ensemble vide typé du type de l'ensemble dont il est le résultat (i.e. $\varnothing = A - A$), et il n'y a donc pas unicité de l'ensemble vide. 
 
+\label{SubstGen}
 \subsection{Langage de substitution généralisée}
 
 Un triplet $ \{P\}\;S\;\{Q\} $ est à interpréter dans la logique de Hoare de la façon suivante : si la propriété $P$ est vraie et qu'on exécute le code $S$, alors si $S$ termine on a la propriété $Q$. En particulier, si on n'a pas de garantie sur la terminaison de l'instruction $S$ on parle de correction partielle. Si on sait que S termine, on parle alors de correction totale. La propriété $P$ est appelée précondition et $Q$ postcondition. Les axiomes de la logique de Hoare sont donnés en~\cref{Hoare}.
@@ -184,7 +185,7 @@ En B on utilise la notation $[S]Q$ au lieu de $wp(S, Q)$. On ne traitera pas ici
 \begin{description}
 \item[Substitution simple] ~
 
-$[ x := E ]P \Leftrightarrow P[E/x]$ où $P[E/x]$ est le prédicat $P$ où toutes les occurrences libres de $x$ (i.e. qui ne sont pas sous le contrôle d'un quantificateur) ont été remplacé par $E$. En particulier, on a alors $\{ [x := E ]P \} x := E\{ P\}$, par définition même de la plus faible précondition.
+$[ x := E ]P \Leftrightarrow P[E/x]$ où $P[E/x]$ est le prédicat $P$ où toutes les occurrences libres de $x$ (i.e. qui ne sont pas sous le contrôle d'un quantificateur) ont été remplacées par $E$. En particulier, on a alors $\{ [x := E ]P \} x := E\{ P\}$, par définition même de la plus faible précondition.
 \item[Substitution identité]  ~
 
 $[\textsc{skip}]I \Leftrightarrow I$
@@ -255,7 +256,7 @@ Fonction injective totale & $s \rightarrowtail t$ & $s \p\rightarrowtail t \cap 
 
 \subsection{Description informelle}
 
-La méthode B est fondée sur la notion de \emph{modèle}. Un \emph{modèle} décrit les \emph{opérations} d'un système, ses données entrantes et sortantes et des valeurs (son \emph{état}) et des propriétés sur ces données et valeurs (des \emph{contraintes} ou \emph{invariants}).
+La méthode B est fondée sur la notion de \emph{modèle}. Un \emph{modèle} en B décrit les \emph{opérations} d'un système, ses données entrantes et sortantes et des valeurs (son \emph{état}) et des propriétés sur ces données et valeurs (des \emph{contraintes} ou \emph{invariants}).
 
 Un utilisateur d'un système qui en connaît un modèle peut fournir des données et des valeurs en entrée (i.e. fournir un état du système dans la modélisation actuelle) et observer l'état sortant. Tous ces  éléments (propriétés, données, opérations, état) peuvent être aussi abstraits et généraux que voulu.
 
@@ -297,6 +298,31 @@ Ce qui donne les mots clés de base en langage B, appelés \emph{clauses} :
 \ \\
 Les paramètres sont listés entre parenthèses après le nom de la machine. Il existe également d'autres clauses, certaines seront vues dans la suite et le reste est donné en~\cref{ComplementSyntaxique}.
 
+\subsection{Dans les opérations}
+
+\subsubsection{Informellement parlant}
+
+C'est ici que s'applique la notion de substitution généralisée vue en \cref{SubstGen}. En effet, une opération applique des substitutions sur des formules. Les formules seront vraies en fin d'opération si les préconditions impliquaient plus petite précondition selon la susbtitution (i. e. que les préconditions étaient plus fortes que la plus faible précondition).
+
+Les préconditions incluent toujours au moins les invariants. En effet, par définition, les invariants sont toujours vrais (la preuve doit néanmoins en être faite, voir \cref{Preuve}).~\\
+
+Attention, on ne fait pas pour autant des substitutions préconditionnées. Si aucune précondition n'est ajoutée à une opération, les préconditions implicites sont alors les invariants de la machine abstraite. Il est néanmoins possible d'appliquer une substitution préconditionnée, en rajoutant des préconditions à l'opération (en plus des invariants). Il peut éventuellement être nécessaire de faire un choix dans un ensemble, ce qui est possible dans le cadre de la théorie sous-jacente. Il est aussi possible de faire des boucles.
+
+\subsubsection{Formellement parlant}
+
+Soit une substitution S et une opération "op" la réalisant. Dans la clause \textbf{OPERATIONS} on trouve :
+\begin{itemize}
+\item Un en-tête de la forme [y $\leftarrow$ ] op($x_{1}$, ..., $x_{n}$) $\Bequal$. La première partie, spécifiant où stocker une éventuelle valeur de retour, est optionnelle). Les arguments $x_{1}$, ..., $x_{n}$ seront accessibles pendant toute la durée de l'opération.
+\item Le mot clé \textbf{END} qui clôt l'opération.
+\end{itemize}
+
+Dans une opération, on peut trouver :
+\begin{itemize}
+\item Des préconditions sous le mot-clé \textbf{PRE} P \textbf{THEN} \emph{stuff} \textbf{END}
+(ces préconditions s'ajoutent aux invariants, toujours vrais au moins jusqu'à avant l'opération).
+\item Un choix dans un ensemble avec \textbf{ANY} x \textbf{WHERE} P(x) \textbf{THEN} \emph{stuff with x} \textbf{END}.
+\item Des boucles avec \textbf{WHILE} P(x) \textbf{DO} \emph{stuff} \textbf{END}.
+\end{itemize}
 \iffalse
 La méthode B introduit un langage rigoureux pour représenter les programmes et leurs propriétés en utilisant le concept de substitution généralisée. Elle utilise la notion simple de machine abstraite qui est assez voisine de la notion d’objet, mais qui, en plus, intègre la notion d'invariant assurant la préservation de propriétés
 des variables d'état de la machine, quelles que soient les opérations appliquées.
@@ -367,6 +393,7 @@ $emprunt := \emptyset$ &
 \subsubsection{La machine abstraite, partie dynamique}
 
 Et voici maintenant la partie dynamique : la clause d'opérations. On spécifie ici trois opérations, qui s'expliquent d'elles mêmes sur le fond.
+Remarquons ici 
 \\
 \\
 \noindent \textbf{OPERATIONS}\\ \\
@@ -393,7 +420,7 @@ Et voici maintenant la partie dynamique : la clause d'opérations. On spécifie 
 \textbf{END} \tabularnewline
 \end{longtable}
 \ \\ 
-\indent retourner(\emph{aa}, \emph{ll}) $\doteq$
+\indent retourner(\emph{aa}, \emph{ll}) $\Bequal$
 \begin{longtable}{lll}
 \textbf{PRE} \tabularnewline
 \indent \emph{aa} $\in$ abonne & $\wedge$ \tabularnewline 
@@ -409,8 +436,8 @@ Et voici maintenant la partie dynamique : la clause d'opérations. On spécifie 
 \end{longtable}
 
 \setlength\LTleft{\fill}
-
 \subsection{Preuve d'invariants}
+\label{Preuve}
 
 %Les propriétés invariantes sont vérifiées par la dynamique
 %les raffinements préservent la correction totale
@@ -876,6 +903,16 @@ Pour se faire, il faut et il suffit qu'il existe une relation $<$ bien fondée (
 \textbf{DEFINITIONS} : Alias facilitant la rédaction du reste de la machine.
 
 TODO : $ABSTRACT\_CONSTANTS$, $CONCRETE\_VARIABLES$
+
+\subsection{Autres éléments d'opérations}
+
+\subsubsection{Boucles}
+
+Les boucles doivent déclarer :
+\begin{itemize}
+\item un variant : c'est la partie qui varie dans la boucle, et qui doit converger pour que la boucle termine.
+\item des invariants : ce sont des propriétés que la boucle doit conserver.
+\end{itemize}
 
 \section{Code source de l'exemple}
 \label{CodeSource}
