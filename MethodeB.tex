@@ -200,7 +200,7 @@ $[\textsc{PRE } P \textsc{ THEN } S \textsc{ END}]I \Leftrightarrow P \wedge [S]
 $[\textsc{IF } Q \textsc{ THEN } S1 \textsc{ ELSE } S2 \textsc{ END}]P \Leftrightarrow (Q \Rightarrow [S1]P) \wedge( (\lnot Q)\Rightarrow [S2]P)$
 \item[Substitution gardée]  ~
 
-$[\textsc{SELECT } P \textsc{ THEN } S \textsc{ END}]I \Leftrightarrow P \Rightarrow [S]I$
+$[\textsc{SELECT } P \textsc{ THEN } S \textsc{ END}]I \Leftrightarrow \left( P \Rightarrow [S]I \right)$
 \item[Substitution de choix binaire indéterministe]  ~
 
 $[\textsc{CHOICE } S \textsc{ OR } T \textsc{ END}]I \Leftrightarrow [S]I \wedge [T ]I$

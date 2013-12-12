@@ -214,18 +214,44 @@ Pour spécifier formellement des propriétés, on utilise la théorie des ensemb
 \begin{definition}
 $ \{P\}\;S\;\{Q\} $ : si la propriété $P$ est vraie et qu'on exécute le code $S$, alors si $S$ termine on a la propriété $Q$.
 \end{definition}
-
-Pour spécifier formellement des opérations, on utilise les substitutions généralisées.
-\\\pause
-Une substitution remplace des éléments par des expressions dans une propriété :\\[5pt]
-[x := E](A $\wedge$ x) $\Leftrightarrow$ A $\wedge$ E\\[5pt]
-[n := n+1](n $\leq$ max) (itération de boucle)
-\\[10pt]\pause
-Si l'on veut s'assurer qu'une propriété P est vérifiée après avoir appliqué une substitution S, il faut qu'avant l'application de S, une précondition minimale soit vérifiée, notée [S]P.\pause Par exemple :\\[5pt]
-[n := n+1](n $\leq$ max) $\Leftrightarrow$ n $\leq$ max\ -\ 1\pause\\
-[n := n+1](n $\leq$ max $\wedge$ n $\in$ $\mathbb{N}$) $\Leftrightarrow$ n $<$ max
+\pause
+\begin{definition}[Plus faible précondition]
+Pour un prédicat $Q$ et une exécution $S$, on définie la plus faible précondition $S[Q]$ telle que :
+\begin{itemize}
+\item $S[Q]$ est une précondition garantissant $Q$  après exécution de $S$ : $ \{ S[Q] \} S \{ Q\}$
+\item $S[Q]$  est la plus faible précondition : si $\{ P \} S \{ Q \}$ alors $P \Rightarrow S[Q]$.
+\end{itemize}
+\end{definition}
+Par exemple : $[x := x+1] x = 5 \Leftrightarrow x+1 = 5$
 \end{frame}
 
+\subsection{Fonctions et relations}
+\begin{frame}
+\frametitle{Modélisation formelle}
+\framesubtitle{Fonctions et relations}
+On note  $ s \leftrightarrow t \Bequal \mathbb{P}(s \times t)$ qui est l'ensemble des relations entre les éléments de $s$ et les éléments de $t$. De plus, une paire ordonnée $(x, y)$ est notée $x \mapsto y$.
+
+Fonction partielle : $r \in s \pfun t$
+
+Fonction totale :  $r \in s \rightarrow t$ 
+%\toprule, \midrule and \bottomrule.
+{\arraycolsep=1.4pt\def\arraystretch{2.2}
+\renewcommand{\arraystretch}{2}
+\begin{table}
+\centering
+\begin{tabular}[h]{|c | c | c|}
+\hline
+\bf Condition & \bf Expression &  \bf Définition \tabularnewline
+\hline 
+$r \in s \leftrightarrow t$ & dom($r$) & $\{ x~|~x\in s \wedge \exists y~(y \in t \wedge (x, y)  \in r)\}$  \tabularnewline
+$r \in s \leftrightarrow t$ & $r^{-1}$ & $\{(y, x)~|~(y, x) \in t \times s \wedge (x, y) \in r\}$ \tabularnewline
+\hline
+\end{tabular}
+\caption{Quelques opérateurs sur les relations}
+\end{table}
+}
+
+\end{frame}
 
 \iffalse
 \begin{frame}
