@@ -291,7 +291,7 @@ Ce qui donne les mots clés de base en langage B, appelés \emph{clauses} :
 \item \textbf{CONSTANTS} : contient la déclaration des noms des constantes~;
 \item \textbf{PROPERTIES} : contient les axiomes caractérisant les constantes~;
 \item \textbf{VARIABLES} : contient la déclaration des variables constituant l'état de la machine~;
-\item \textbf{INVARIANTS} : contient une formule logique qui est l'invariant que doit satisfaire la machine (i.e. que doit satisfaire son état interne)~;
+\item \textbf{INVARIANT} : contient une formule logique qui est l'invariant que doit satisfaire la machine (i.e. que doit satisfaire son état interne)~;
 \item \textbf{INITIALIZATION} : contient une substitution généralisée qui définie la valeur initiale des variables~;
 \item \textbf{OPERATIONS} : contient les définitions des opérations de la machine. Une opération est définie sous forme d'une substitution généralisée et peut modifier l'état de la machine, prendre des arguments ou (inclusif) renvoyer une valeur.
 \end{itemize}
@@ -381,13 +381,13 @@ Voici les clauses rédigée en B (ici avec des symboles mathématiques, voir ann
 \begin{longtable}{ll} LIVRES; \\ PERSONNES\\ \end{longtable}
 \noindent\textbf{VARIABLES}
 \begin{longtable}{ll} livre , exemplaire , abonne , emprunt \end{longtable}
-\noindent\textbf{INVARIANTS}
+\noindent\textbf{INVARIANT}
 \begin{longtable}{ll}
-$livre \subseteq LIVRE $ & $\wedge$ \tabularnewline
-$abonne \subseteq PERSONNE$ & $\wedge$ \tabularnewline
+$livre \subseteq LIVRES $ & $\wedge$ \tabularnewline
+$abonne \subseteq PERSONNES$ & $\wedge$ \tabularnewline
 $exemplaire \in livre \leftrightarrow N1$ & $\wedge$ \tabularnewline
 $emprunt \in ( exemplaire \nrightarrow abonne )$ & $\wedge$ \tabularnewline
-$\forall ab\ (\ ab \in abonne \Rightarrow (\ \textbf{card}\ (\ emprunt ^{-1}[\{ab\}] \leq maxi\ ))$ &
+$\forall ab\ (\ ab \in abonne \Rightarrow (\ \textbf{card}\ (\ emprunt ^{-1}(\{ab\})) \leq maxi\ ))$ &
 \end{longtable}
 \noindent\textbf{INITIALISATION}
 \begin{longtable}{ll}
@@ -450,7 +450,7 @@ Et voici maintenant la partie dynamique : la clause d'opérations. On spécifie 
 
 \setlength{\intextsep}{0pt}%
 \setlength{\columnsep}{15pt}%
-\begin{wrapfigure}[11]{r}{0.3\textwidth}
+\begin{wrapfigure}[14]{r}{0.3\textwidth}
 \noindent \textbf{MACHINE} m \newline
 \textbf{CONSTANTS} $k$ \newline
 \textbf{PROPERTIES} $T$ \newline
@@ -572,7 +572,6 @@ On cherche a modéliser une fonction minimum et maximum\footnote{L'exemple est i
 Le code source est disponible en~\cref{CodeSource}.
 
 \noindent \textbf{MACHINE} utils \\
-\textbf{CONSTANTS} $t,n$ \\
 \textbf{OPERATIONS} \\
 $res \leftarrow mini(x, y) \Bequal$ \\
 \hspace*{1em}  \textbf{PRE} $x \in \mathbb{N} \wedge  y \in \mathbb{N} $ \textbf{THEN} \\
