@@ -139,7 +139,7 @@ En particulier, l'Atelier B est entre autres constitué de :
 
 Le formalisme de modélisation s'appuie sur plusieurs concepts : la théorie des ensembles, la logique des prédicats du premier ordre et le langage de substitutions généralisées.
 
-Pour concevoir ce document, nous nous sommes basés sur \cite{behm1999meteor, habrias2006specifications, theBBook, dossierTechnique, VerimagPDF}
+Pour concevoir ce document, nous nous sommes basés sur \cite{behm1999meteor, habrias2006specifications, theBBook, dossierTechnique, VerimagPDF, introB, hevB}
 
 \section{Théorie sous-jacente de la méthode B}
 
@@ -170,8 +170,9 @@ Cela donne ainsi l'axiomatique suivante :
 L'idée est que, lors de la preuve d'un prédicat ayant des variables liées à des quantificateurs, les variables liées sont supposées appartenir à un ensemble.
 Sans en détailler ici toutes les implications, il est toutefois important de remarquer que l'ajout de ces contraintes de type-checking rend l'ensemble vide typé du type de l'ensemble dont il est le résultat (i.e. $\varnothing = A - A$), et il n'y a donc pas unicité de l'ensemble vide. 
 
-\label{SubstGen}
+
 \subsection{Langage de substitution généralisée}
+\label{SubstGen}
 
 Un triplet $ \{P\}\;S\;\{Q\} $ est à interpréter dans la logique de Hoare de la façon suivante : si la propriété $P$ est vraie et qu'on exécute le code $S$, alors si $S$ termine on a la propriété $Q$. En particulier, si on n'a pas de garantie sur la terminaison de l'instruction $S$ on parle de correction partielle. Si on sait que S termine, on parle alors de correction totale. La propriété $P$ est appelée précondition et $Q$ postcondition. Les axiomes de la logique de Hoare sont donnés en~\cref{Hoare}.
 
@@ -212,7 +213,7 @@ $[\textsc{ANY } z \textsc{ WHERE } P \textsc{ THEN } S \textsc{ END}]I \Leftrigh
 
 \subsection{Relations et fonctions}
 
-\emph{En théorie des ensembles, les relations sont un cas particulier d'ensemble (des ensembles de paires) et les fonctions sont un cas particulier de relations. Cependant ces concepts essentiels bénéficient de notations spécifiques que nous décrivons ici.}\footnote{Ces définitions proviennent de \url{http://www-verimag.imag.fr/~potet/ejcp-expose.pdf}.}
+\emph{En théorie des ensembles, les relations sont un cas particulier d'ensembles (des ensembles de paires) et les fonctions sont un cas particulier de relations. Cependant ces concepts essentiels bénéficient de notations spécifiques que nous décrivons ici.}\footnote{Ces définitions proviennent de \url{http://www-verimag.imag.fr/~potet/ejcp-expose.pdf}.}
 
 On note  $ s \leftrightarrow t \Bequal \mathbb{P}(s \times t)$ qui est l'ensemble des relations entre les éléments de $s$ et les éléments de $t$. De plus, une paire ordonnée $(x, y)$ est notée $x \mapsto y$.
 
@@ -242,7 +243,7 @@ $r \in s \leftrightarrow t$ & $r^{-1}$ & $\{(y, x)~|~(y, x) \in t \times s \wedg
 \hline
 \bf Sens & \bf Notation &  \bf Définition \tabularnewline
 \hline 
-Fonction partielle & $r \in s \pfun t$ & $\{ r~|~r \in s \leftrightarrow t \wedge \forall x, y, z~(x,y \in r \wedge x,z \in r \Rightarrow y=z )\}$  \tabularnewline
+Fonction partielle & $r \in s \pfun t$ & $\{ r~|~r \in s \leftrightarrow t \wedge \forall x, y, z~( (x,y) \in r \wedge (x,z) \in r \Rightarrow y=z )\}$  \tabularnewline
 Fonction totale &  $r \in s \rightarrow t$ & $\{f~|~f \in s \pfun t \wedge \text{ dom}(f) = s\}$ \tabularnewline
 Fonction injective partielle & $s \p\rightarrowtail t$ & $\{f~|~f \in s \pfun t \wedge f^{-1} \in  t \pfun s\}$ \tabularnewline
 Fonction injective totale & $s \rightarrowtail t$ & $s \p\rightarrowtail t \cap s \rightarrow t$ \tabularnewline 
@@ -302,24 +303,21 @@ Les paramètres sont listés entre parenthèses après le nom de la machine. Il 
 
 \subsubsection{La théorie}
 
-C'est ici que s'applique la notion de substitution généralisée vue en \cref{SubstGen}. En effet, une opération applique des substitutions sur des formules. Les formules seront vraies en fin d'opération si les préconditions impliquaient plus petite précondition selon la susbtitution (i. e. que les préconditions étaient plus fortes que la plus faible précondition).
+C'est ici que s'applique la notion de substitution généralisée vue en \cref{SubstGen}. En effet, une opération applique des substitutions sur des formules. Les formules seront vraies en fin d'opération si les préconditions impliquaient la plus petite précondition selon la substitution (i. e. que les préconditions étaient plus fortes que la plus faible précondition).
 
-Les préconditions incluent toujours au moins les invariants. En effet, par définition, les invariants sont toujours vrais (la preuve doit néanmoins en être faite, voir \cref{Preuve}).~\\
-
-Attention, on ne fait pas pour autant des substitutions préconditionnées. Si aucune précondition n'est ajoutée à une opération, les préconditions implicites sont alors les invariants de la machine abstraite. Il est néanmoins possible d'appliquer une substitution préconditionnée, en rajoutant des préconditions à l'opération (en plus des invariants). Il peut éventuellement être nécessaire de faire un choix dans un ensemble, ce qui est possible dans le cadre de la théorie sous-jacente. Il est aussi possible de faire des boucles.
 
 \subsubsection{La pratique}
 
 Dans la clause \textbf{OPERATIONS} on trouve :
 \begin{itemize}
-\item Un en-tête de la forme [y $\leftarrow$ ] op($x_{1}$, ..., $x_{n}$) $\Bequal$. La première partie, spécifiant où stocker une éventuelle valeur de retour, est optionnelle). Les arguments $x_{1}$, ..., $x_{n}$ seront accessibles pendant toute la durée de l'opération.
+\item Une en-tête de la forme [$y_{1}$, ..., $y_{n}$ $\leftarrow$ ] op($x_{1}$, ..., $x_{n}$) $\Bequal$. La première partie, spécifiant où stocker les éventuelles valeurs de retour, est optionnelle). Les arguments $x_{1}$, ..., $x_{n}$ seront accessibles pendant toute la durée de l'opération.
 \item Le mot clé \textbf{END} qui clôt l'opération.
 \end{itemize}
 ~\\
 Dans une opération, on peut trouver :
 \begin{itemize}
 \item Des préconditions
-(ces préconditions s'ajoutent aux invariants, toujours vrais au moins jusqu'à avant l'opération).
+(ces préconditions s'ajoutent aux invariants, toujours vrais avant et après toute opération).
 \item Un choix dans un ensemble
 \item Un choix gardé dans un ensemble
 \item Des boucles
@@ -386,15 +384,15 @@ Voici les clauses rédigée en B (ici avec des symboles mathématiques, voir ann
 $livre \subseteq LIVRES $ & $\wedge$ \tabularnewline
 $abonne \subseteq PERSONNES$ & $\wedge$ \tabularnewline
 $exemplaire \in livre \leftrightarrow N1$ & $\wedge$ \tabularnewline
-$emprunt \in ( exemplaire \nrightarrow abonne )$ & $\wedge$ \tabularnewline
+$emprunt \in ( exemplaire \pfun abonne )$ & $\wedge$ \tabularnewline
 $\forall ab\ (\ ab \in abonne \Rightarrow (\ \textbf{card}\ (\ emprunt ^{-1}(\{ab\})) \leq maxi\ ))$ &
 \end{longtable}
 \noindent\textbf{INITIALISATION}
 \begin{longtable}{ll}
 $livre := \{Oui-Oui,\ Comment\ Mourir,\ Le\ Code\ Civil\} $& $||$ \tabularnewline
-$exemplaire := \{1 \mapsto Oui-Oui,\ 2 \mapsto Oui-Oui,\ 1 \mapsto Comment\ Mourir\}$ & $||$ \tabularnewline
+$exemplaire := \{Oui-Oui \mapsto 1,\ Oui-Oui \mapsto 2,\ Comment\ Mourir \mapsto 1\}$ & $||$ \tabularnewline
 $abonne := \{Jean\ Dupont,\ Blob\ Duchmol,\ Pierre\ Smash\} $& $||$ \tabularnewline
-$emprunt := \{Pierre\ Smash \mapsto ( 2 \mapsto Oui-Oui)\ \}$ &
+$emprunt := \{( Oui-Oui \mapsto 2)  \mapsto Pierre\ Smash \}$ &
 \end{longtable}
 
 \subsubsection{La machine abstraite, partie dynamique}
@@ -405,9 +403,9 @@ Et voici maintenant la partie dynamique : la clause d'opérations. On spécifie 
 \noindent \textbf{OPERATIONS}\\ \\
 \indent lr $\leftarrow$ creer\_Livre $\Bequal$
 \begin{longtable}{ll} \textbf{PRE} \tabularnewline
-\indent LIVRE\ \textbackslash \ livre $\neq$ $\emptyset$ \tabularnewline
+\indent LIVRE\ $-$ livre $\neq$ $\emptyset$ \tabularnewline
 \textbf{THEN} \tabularnewline
-\indent \textbf{ANY} \emph{ll} \textbf{WHERE} \tabularnewline \indent \indent \emph{ll} $\in$ LIVRE\ \textbackslash \ livre \tabularnewline
+\indent \textbf{ANY} \emph{ll} \textbf{WHERE} \tabularnewline \indent \indent \emph{ll} $\in$ LIVRE\ $-$ livre \tabularnewline
 \indent \textbf{THEN} \tabularnewline
 \indent \indent livre := livre $\cup$ \{\emph{ll}\} $||$ \tabularnewline
 \indent \indent lr := \emph{ll} \tabularnewline
@@ -421,7 +419,7 @@ Et voici maintenant la partie dynamique : la clause d'opérations. On spécifie 
 \indent \emph{aa} $\in$ abonne & $\wedge$ \tabularnewline 
 \indent \emph{ll} $\in$ livre & $\wedge$ \tabularnewline
 \indent $\exists$ \emph{nn}.\ (\emph{nn} $\in$ N1 $\wedge$ \emph{ll} $\mapsto$ \emph{nn} $\in$ exemplaire $\wedge$ \emph{ll} $\mapsto$ \emph{nn} $\notin$ dom(emprunt)) & $\wedge$ \tabularnewline
-\indent \textbf{card}(emprunt $^{-1}$[$\{$ab$\}$] $<$ maxi) \tabularnewline
+\indent \textbf{card}(emprunt$^{-1}$($\{aa\}$) $<$ maxi) \tabularnewline
 \textbf{THEN} \tabularnewline \indent emprunt := emprunt $\cup$ \{(\emph{ll} $\mapsto$ \emph{nn}) $\mapsto$ \emph{aa})\} \tabularnewline
 \textbf{END} \tabularnewline
 \end{longtable}
@@ -434,7 +432,7 @@ Et voici maintenant la partie dynamique : la clause d'opérations. On spécifie 
 \indent $\exists$ \emph{nn}.\ (\emph{nn} $\in$ N1 $\wedge$ \emph{ll} $\mapsto$ \emph{nn} $\in$ exemplaire $\wedge$ (\emph{ll} $\mapsto$ \emph{nn}) $\mapsto$ \emph{aa} $\in$ emprunt )\tabularnewline
 \textbf{THEN} \tabularnewline
 \indent \textbf{ANY} \emph{nn} \textbf{WHERE} \tabularnewline
-\indent \indent \emph{nn} $\in$ N1 $\wedge$ $\mapsto$ \emph{nn} $\in$ exemplaire & $\wedge$ \tabularnewline
+\indent \indent \emph{nn} $\in$ N1 $\wedge$ $ll \mapsto$ \emph{nn} $\in$ exemplaire & $\wedge$ \tabularnewline
 \indent \indent (\emph{ll} $\mapsto$ \emph{nn}) $\mapsto$ \emph{aa} $\in$ emprunt \tabularnewline
 \indent \textbf{THEN} \tabularnewline
 \indent \indent emprunt := emprunt -- \{(\emph{ll} $\mapsto$ \emph{nn}) $\mapsto$ \emph{aa})\} \tabularnewline
@@ -484,28 +482,19 @@ Formellement, pour une machine telle que celle représentée par la~\cref{M1}, i
 \begin{minipage}[l]{0.30\linewidth}
 \end{minipage}
 \fi
+~
 
 Reprenons l'exemple de la bilbiothèque, et montrons la correction de l'opération \emph{emprunter}.
 
-Que doit-on prouver ? Ici, les invariants potentiellement affectés \textbf{a posteriori} par l'opération sont :\\ \\
-emprunt $\in$ exemplaire $\nrightarrow$ abonne\\
-et \\
-$\forall$ ab\ (\ ab $\in$ abonne $\Rightarrow$ (\ \textbf{card}\ (\ emprunt $^{-1}$[\{ab\}] $\leq$ maxi\ )) (*)\\
+Que doit-on prouver ? Ici, les invariants potentiellement affectés par l'opération sont :
+\begin{itemize}
+\item emprunt $\in$ exemplaire $\pfun$ abonne
+\item $\forall$ ab\ (\ ab $\in$ abonne $\Rightarrow$ (\ \textbf{card}\ (\ emprunt$^{-1}(\{ab\}) \leq$ maxi\ ))
+\end{itemize}~
 
-\noindent Mais, étant des invariants, ces propriétés sont vérifiées \textbf{a priori} au moment de réaliser l'opération. D'autres part, l'opération ne démarre que si ses préconditions sont vérifiées :\\
-\emph{aa} $\in$ abonne \\ 
-\emph{ll} $\in$ livre \\
-$\exists$ \emph{nn}.\ (\emph{nn} $\in$ N1 $\wedge$ \emph{ll} $\mapsto$ \emph{nn} $\in$ exemplaire $\wedge$ \emph{ll} $\mapsto$ \emph{nn} $\notin$ dom(emprunt)) \\
-\textbf{card}(emprunt $^{-1}$[$\{$ab$\}$] $<$ maxi) (1)\\
+La précondition $ll \mapsto nn \not\in $ dom(emprunt) permet de s'assurer que le nouvel ensemble emprunt reste une fonction partielle, ce qui prouve que emprunt $\in$ exemplaire $\pfun$ abonne après l'opération.
 
-Comme\\
-exemplaire $\in$ livre $\leftrightarrow$ N1\\
-L'opération\\
-emprunt := emprunt $\cup$ \{(\emph{ll} $\mapsto$ \emph{nn}) $\mapsto$ \emph{aa})\}\\
-conserve trivialement l'invariant\\
-emprunt $\in$ exemplaire $\nrightarrow$ abonne\\
-De plus avec (1) (et son inégalité stricte) (*) est clairement conservé aussi.
-
+Ensuite, puisque le cardinal de emprunt$^{-1}(\{ab\})$ est strictement plus petit que maxi et qu'on lui rajoute un unique élément, le deuxième invariant est également vérifié.
 
 \section{Raffinement}
 
@@ -517,8 +506,10 @@ Une substitution \textbf{$T$ est un raffinement de S} s'il établit aussi R (i.e
 
 \emph{Le raffinement est conduit selon trois voies : la suppression des éléments non exécutables du pseudo-code (pré-condition et choix), l'introduction des structures classiques de contrôle de la programmation (séquence et boucle) et la transformation des structures de données mathématiques (ensembles, relations, fonctions,séquences et arbres) en d’autres structures qui permettent d’être programmable (variables simples, booléens, tableaux ou files).}\cite{dossierTechnique}
 
+\iffalse
 L’action élémentaire est formalisée au moyen d’une généralisation de la notion de substitution, dite \og substitution généralisée \fg. Parmi ces substitutions généralisées,
 il y a des choix non déterministes laissant la place à des décisions plus tardives qui seront prises dans la phase de raffinement.
+\fi
 
 \subsection{Les obligations de preuves de raffinement}
 
@@ -547,7 +538,7 @@ Les seules substitutions autorisées sont\footnote{La suite provient de \cite{ha
 \item WHILE ...DO ...INVARIANT...VARIANT...END (la boucle avec l'invariant de boucle et le variant de boucle)
 \item VAR ...IN ...END
 \item Les opérations des machines importées
-\item les opérations d'interrogation des machines vues
+\item Les opérations d'interrogation des machines de la clause SEES
 \item Les machines importées sont initialisées selon leur propre clause INITIALISATION, à moins que la machine IMPLEMENTATION ait une clause INITIALISATION.
 \end{itemize}
 
@@ -686,11 +677,11 @@ Au milieu des années 90, une extension de la méthode B a été développée af
 \indent Un  événement est déclenché lorsque sa garde est vérifiée. Si plusieurs événements sont déclenchables (i.e. leur garde est vérifiée), le déclenchement est indéterminisme. \newline
 \indent Quand on raffine, alors qu'en B classique on affaiblit les préconditions, en B événementiel, on renforce les gardes.}\cite{habrias2006specifications}
 
-Les preuves a réaliser diffèrent du B \og normal\fg. Par exemple il faut :
+Les preuves a réaliser diffèrent du B \og normal\fg. Par exemple, il faut :
 \begin{itemize}
-\item prouver que l'état initial vérifie l'invariant pour l'état initial $x$; $ Init \Rightarrow I(x)$
-\item prouver que tous les événements respectent les invariants : $ I(x) \wedge P(e)(x, x') \Rightarrow I(x')$ où $BA(e)(x, x')$ sont les prédicats associés à événement $e$ sur l'état initial $x$ et l'état final $x'$.
-\item prouver l'absence de deadlock (i.e. une garde est toujours vérifiée) : $ I(x) \Rightarrow \left( grd(e_1) \vee \ldots grd(e_n) \right)$
+\item prouver que l'état initial vérifie l'invariant pour l'état initial $x$: $ Init \Rightarrow I(x)$
+\item prouver que tous les événements respectent les invariants : $ I(x) \wedge P(e)(x, x') \Rightarrow I(x')$ où $P(e)(x, x')$ sont les prédicats associés à l'événement $e$ sur l'état initial $x$ et l'état final $x'$.
+\item prouver l'absence de deadlock (i.e. une garde est toujours vérifiée) : $ I(x) \Rightarrow \left( grd(e_1) \vee \ldots \vee grd(e_n) \right)$
 \end{itemize}
 
 \iffalse
@@ -723,13 +714,13 @@ vu en B classique, complétée par deux autres preuves : la preuve
 de faisabilité et la preuve de vivacité.\cite{dossierTechnique}
 \fi
 
-\section{Vers l'utilisation de B événementiel pour les modèles continus}
+\subsection{Vers l'utilisation de B événementiel pour les modèles continus}
 
-B événementiel est utilisé, nous l'avons vu, pour les systèmes à transitions, donc discrets. Mais beaucoup de systèmes incluent des parties continues, en particulier, des boucles de contrôle avec des actuateurs à action continue (un moteur, des capteurs analogiques ...). Même si le fonctionnement interne de ces composants est souvent numérisé, ce sot néanmoins des fonctions qiu varient continuement, à chaque temps d'horloge. De surcroît le phénomène qu'ils créent ou observe est lui continu (du moins le modèle le plus fiable de ces composants est-il continu à l'échelle macroscopique). Et enfin, c'est souvent dans ces composants que se situe l'éventuel danger pour les personnes.
+B événementiel est utilisé, nous l'avons vu, pour les systèmes à transitions, et donc de nature discrète. Mais beaucoup de systèmes incluent des parties continues, en particulier, des boucles de contrôle avec des actuateurs à action continue (un moteur, des capteurs analogiques ...). Même si le fonctionnement interne de ces composants est souvent numérisé, ce sont néanmoins des fonctions qui varient continuement. De surcroît le phénomène qu'ils créent ou observe est souvent continu. Et enfin, c'est souvent dans ces composants que se situe l'éventuel danger pour les personnes.
 
-Richard Banach et Michael Butler, de l'université de Manchester, ont donc essayé de concevoir ce qu'ils ont appelé "B événement hybride" (\cite{hevB}). Ils ont pris comme cas d'étude un problème d'actualité : le centrage d'une voiture dans une file d'une voie (lane centering en Anglais), en décalage tant latéral qu'angulaire.
+Richard Banach et Michael Butler, de l'université de Manchester, ont donc essayé de concevoir ce qu'ils ont appelé \og B événement hybride\fg \cite{hevB}. Ils ont pris comme cas d'étude le maintien de la trajectoire d'une voiture, et plus précisément son recentrage dans une voie (\textit{lane centering} en anglais).
 
-Le cœur de leur méthode est en fait continu, et les opérations discrètes sont vues comme des cas particuliers d'opérations continues. Néanmoins, les systèmes sont quand même modélisés à partir de machines à états/événements, venant de B événement. La différenciation entre événements discrets et continues est faite à l'aide d'une clause 'STATUS' qui spécifie \emph{pliant} pour les évènements continus de machines abstraites et \emph{ordinary} pour les autres. Ils ont de surcroît rajouté une clause 'COMPLY' pour spécifier les contraintes sur l'évènement : on peut mettre une équation différentielle (qu'il faudra préciser dans une clause 'SOLVE'), des invariants classiques, et d'autres types de contraintes continues (variation monotone, convexe, concave, contraintes à l'arrivée et au départ ...).
+Le cœur de leur méthode est en fait continu, et les opérations discrètes sont vues comme des cas particuliers d'opérations continues. Néanmoins, les systèmes sont quand même modélisés à partir de machines à états/événements, venant de B événement. Ce système permet par exemple de spécifier des signaux continues, à partir d'équations différentielles par exemple, et de rajouter des invariants sur les signaux continues (variation monotone, convexité, concavité, valeur initiale).
 
 \appendix
 
