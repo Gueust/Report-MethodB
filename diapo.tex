@@ -234,6 +234,7 @@ On note  $ s \leftrightarrow t \Bequal \mathbb{P}(s \times t)$ qui est l'ensembl
 Fonction partielle : $r \in s \pfun t$
 
 Fonction totale :  $r \in s \rightarrow t$ 
+\pause
 %\toprule, \midrule and \bottomrule.
 {\arraycolsep=1.4pt\def\arraystretch{2.2}
 \renewcommand{\arraystretch}{2}
@@ -419,20 +420,14 @@ $emprunt := \{Pierre\ Smash \mapsto ( 2 \mapsto Oui-Oui)\ \}$ &
 \frametitle{Le raffinement de machines}
 \framesubtitle{Les bases}
 Le raffinement est le fait de transformer une spécification abstraite en un texte plus proche de la programmation, pour finalement obtenir un programme.
-
+\pause
 En pratique il s'agit de :
 \begin{itemize}
-\pause
 \item Reformuler en fonction du changement d'état
-\pause
 \item Affaiblir des préconditions
-\pause
 \item Concrétiser les ensembles
-\pause
 \item Réduire le non-déterminisme
 \end{itemize}
-\pause
-Tout en gardant bien sûr les invariants au long des opérations. Or on a modifié les opérations, en les remplaçant par des raffinements : ainsi, il faut que les invariants et les éventuelles préconditions impliquent la plus petite précondition des nouvelles substitiutions, telles qu'à la fin les invariants soient encore vérifiés.
 \end{frame}
 
 \begin{frame}
