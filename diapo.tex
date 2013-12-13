@@ -1,4 +1,4 @@
-\documentclass[11pt,a4paper,xcolor=table]{beamer} % ,handout: for printing
+\documentclass[11pt,a4paper,xcolor=table, handout]{beamer} % ,handout: for printing
 \usepackage{etex}
 %\documentclass[handout]{beamer}
 
@@ -67,7 +67,11 @@
 \newtheorem{myprop}{Proposition}
 
 \newcommand{\var}{\operatorname{Var}}
-
+\newcommand{\Bequal}{\mathrel{\widehat{=}}}
+\def\p#1{\mathrel{\ooalign{\hfil$\mapstochar\mkern 5mu$\hfil\cr$#1$}}}
+\def\f#1{\mathrel{\ooalign{\hfil
+    $\mapstochar\mkern 3mu\mapstochar\mkern 5mu$\hfil\cr$#1$}}}
+\def \pfun  {\p\rightarrow}
 
 \makeatother
 \setbeamertemplate{footline}
@@ -106,7 +110,6 @@
 \end{figure}
 La méthode B, inventée par Jean-Raymond Abrial, c'est :\\~\\
 \begin{itemize}
-\pause
 \item Un langage (le langage B)\\~\\
 \pause
 \item Un outil (l'Atelier B)\\~\\
@@ -117,7 +120,7 @@ La méthode B, inventée par Jean-Raymond Abrial, c'est :\\~\\
 
 \begin{frame}
 \frametitle{Introduction}
-\framesubtitle{À quoi sert ... le langage B ?}
+\framesubtitle{À quoi sert le langage B ?}
 B est un langage unique pour :\\~\\
 \pause
 \begin{itemize}
@@ -132,7 +135,7 @@ Et ce à tout niveau d'abstraction.
 
 \begin{frame}
 \frametitle{Introduction}
-\framesubtitle{À quoi sert ... l'Atelier B ?}
+\framesubtitle{À quoi sert l'Atelier B ?}
 \begin{figure}[h]
 \centering
 \includegraphics[scale=0.2]{ressources/logo.png}
@@ -159,7 +162,7 @@ Il comprend :
 \begin{frame}
 \frametitle{Introduction}
 \framesubtitle{À quoi sert ... la méthode B ?}
-La méthode B, enfin, encadre le processus industriel.\\~\\~\pause
+La méthode B, enfin, encadre le processus industriel.\\~\\ \pause
 C'est une méthode formelle par laquelle on peut :\pause
 \begin{itemize}
 \item Énoncer en B les fonctionnalité du logiciel en développement
@@ -207,18 +210,51 @@ Pour spécifier formellement des propriétés, on utilise la théorie des ensemb
 \subsection{Substitutions généralisées}
 \begin{frame}
 \frametitle{Modélisation formelle}
-\framesubtitle{Substitutions généralisées}
-Pour spécifier formellement des opérations, on utilise les substitutions généralisées.
-\\~\pause
-Une substitution remplace des éléments par des expressions dans une propriété :\\[5pt]
-[x := E](A $\wedge$ x) $\Leftrightarrow$ A $\wedge$ E\\[5pt]
-[n := n+1](n $\leq$ max) (itération de boucle)
-\\[10pt]~\pause
-Si l'on veut s'assurer qu'une propriété P est vérifiée après avoir appliqué une substitution S, il faut qu'avant l'application de S, une précondition minimale soit vérifiée, notée [S]P.\pause Par exemple :\\[5pt]
-\indent[n := n+1](n $\leq$ max) $\Leftrightarrow$ n $\leq$ max\ -\ 1\pause\\
-\indent[n := n+1](n $\leq$ max $\wedge$ n $\in$ $\mathbb{N}$) $\Leftrightarrow$ n $<$ max
+\framesubtitle{Logique de Hoare et substitutions généralisées}
+\begin{definition}
+$ \{P\}\;S\;\{Q\} $ : si la propriété $P$ est vraie et qu'on exécute le code $S$, alors si $S$ termine on a la propriété $Q$.
+\end{definition}
+\pause
+\begin{definition}[Plus faible précondition]
+Pour un prédicat $Q$ et une exécution $S$, on définie la plus faible précondition $S[Q]$ telle que :
+\begin{itemize}
+\item $S[Q]$ est une précondition garantissant $Q$  après exécution de $S$ : $ \{ S[Q] \} S \{ Q\}$
+\item $S[Q]$  est la plus faible précondition : si $\{ P \} S \{ Q \}$ alors $P \Rightarrow S[Q]$.
+\end{itemize}
+\end{definition}
+Par exemple : $[x := x+1] x = 5 \Leftrightarrow x+1 = 5$
 \end{frame}
 
+\subsection{Fonctions et relations}
+\begin{frame}
+\frametitle{Modélisation formelle}
+\framesubtitle{Fonctions et relations}
+On note  $ s \leftrightarrow t \Bequal \mathbb{P}(s \times t)$ qui est l'ensemble des relations entre les éléments de $s$ et les éléments de $t$. De plus, une paire ordonnée $(x, y)$ est notée $x \mapsto y$.
+
+Fonction partielle : $r \in s \pfun t$
+
+Fonction totale :  $r \in s \rightarrow t$ 
+\pause
+%\toprule, \midrule and \bottomrule.
+{\arraycolsep=1.4pt\def\arraystretch{2.2}
+\renewcommand{\arraystretch}{2}
+\begin{table}
+\centering
+\begin{tabular}[h]{|c | c | c|}
+\hline
+\bf Condition & \bf Expression &  \bf Définition \tabularnewline
+\hline 
+$r \in s \leftrightarrow t$ & dom($r$) & $\{ x~|~x\in s \wedge \exists y~(y \in t \wedge (x, y)  \in r)\}$  \tabularnewline
+$r \in s \leftrightarrow t$ & $r^{-1}$ & $\{(y, x)~|~(y, x) \in t \times s \wedge (x, y) \in r\}$ \tabularnewline
+\hline
+\end{tabular}
+\caption{Quelques opérateurs sur les relations}
+\end{table}
+}
+
+\end{frame}
+
+\iffalse
 \begin{frame}
 \frametitle{Ce qu'il faut retenir}
 \begin{itemize}
@@ -239,6 +275,7 @@ propriétés
 (calcul des substitutions)
 \end{itemize}
 \end{frame}
+\fi
 
 \section{Modélisation en B}
 \subsection{Généralités}
@@ -284,7 +321,7 @@ Spécifions une bibliothèque où il y a des livres (concept abstrait), des exem
 On peut créer un nouveau livre, \pause en emprunter un exemplaire, \pause et en rendre un.
 \\\iffalse\fi\pause Seuls les abonnés ont accès à ces services.
 \\\iffalse\fi\pause Il peut y avoir plusieurs exemplaires d'un même livre.
-\\\iffalse\fi\pause Il y a une limite au nombre d'emprunts par abonnés.
+\\\iffalse\fi\pause Il y a une limite au nombre d'emprunts par abonné.
 \\~\\\iffalse\fi\pause Ceci est une spécification en langage naturel.
 \end{frame}
 
@@ -294,10 +331,8 @@ On peut créer un nouveau livre, \pause en emprunter un exemplaire, \pause et en
 \setlength{\LTpre}{\medskipamount}
 \setlength{\LTpost}{0pt}
 \setlength\LTleft{\parindent}
-\textbf{MACHINE}
-\begin{longtable}{ll} BIBLIOTHEQUE (maxi) \end{longtable}
-\noindent\textbf{CONSTRAINTS}
-\begin{longtable}{ll} maxi $\in$ N1 \end{longtable}
+\textbf{MACHINE}  BIBLIOTHEQUE (maxi) \\
+\noindent\textbf{CONSTRAINTS} maxi $\in$ N1 \\
 \noindent\textbf{SETS}
 \begin{longtable}{ll} LIVRES; \\ PERSONNES\\ \end{longtable}
 \noindent\textbf{VARIABLES}
@@ -307,8 +342,8 @@ On peut créer un nouveau livre, \pause en emprunter un exemplaire, \pause et en
 $livre \subseteq LIVRE $ & $\wedge$ \tabularnewline
 $abonne \subseteq PERSONNE$ & $\wedge$ \tabularnewline
 $exemplaire \in livre \leftrightarrow N1$ & $\wedge$ \tabularnewline
-$emprunt \in ( exemplaire \nrightarrow abonne )$ & $\wedge$ \tabularnewline
-$\forall ab\ (\ ab \in abonne \Rightarrow (\ \textbf{card}\ (\ emprunt ^{-1}[\{ab\}] \leq maxi\ ))$ &
+$emprunt \in ( exemplaire \pfun abonne )$ & $\wedge$ \tabularnewline
+$\forall ab\ (\ ab \in abonne \Rightarrow (\ \textbf{card}\ (\ emprunt ^{-1}\{ab\} \leq maxi\ ))$ &
 \end{longtable}
 \end{frame}
 
@@ -327,24 +362,29 @@ $emprunt := \{Pierre\ Smash \mapsto ( 2 \mapsto Oui-Oui)\ \}$ &
 \begin{frame}
 \frametitle{Les machines abstraites}
 \framesubtitle{Un exemple}
-\noindent \textbf{OPERATIONS}\\~\\
-\indent lr $\leftarrow$ creer\_Livre $\doteq$
-\begin{longtable}{ll}\textbf{PRE} \tabularnewline
-~~~~~ LIVRE\ \textbackslash \ livre $\neq$ $\emptyset$ \tabularnewline
-\textbf{THEN} \tabularnewline
-~~~~~ \textbf{ANY} \emph{ll} \textbf{WHERE} \tabularnewline ~~~~~ ~~~~~ \emph{ll} $\in$ LIVRE\ \textbackslash \ livre \tabularnewline
-~~~~~ \textbf{THEN} \tabularnewline
-~~~~~ ~~~~~ livre := livre $\cup$ \{\emph{ll}\} $||$ \tabularnewline
-~~~~~ ~~~~~ lr := \emph{ll} \tabularnewline
-~~~~~ \textbf{END} \tabularnewline
+\noindent \textbf{OPERATIONS}
+
+~\\
+\indent lr $\leftarrow$ creer\_Livre $\Bequal$
+
+\textbf{PRE} LIVRE - livre $\neq$ $\emptyset$ \textbf{THEN}
+
+\hspace*{1em} \textbf{ANY} $ll$ \textbf{WHERE}  \emph{ll} $\in$ LIVRE - livre \textbf{THEN} 
+
+\hspace*{2em}  livre := livre $\cup$ \{$ll$\} $||$ 
+
+\hspace*{2em} lr := $ll$
+
+\hspace*{1em} \textbf{END}
+
 \textbf{END};
-\end{longtable}
+
 \end{frame}
 
 \begin{frame}
 \frametitle{Les machines abstraites}
 \framesubtitle{Un exemple}
-\indent emprunter(\emph{aa}, \emph{ll}) $\doteq$
+\indent emprunter(\emph{aa}, \emph{ll}) $\Bequal$
 \begin{longtable}{lll}
 \textbf{PRE} \tabularnewline
 ~~~~ \emph{aa} $\in$ abonne & $\wedge$ \tabularnewline 
@@ -359,7 +399,7 @@ $emprunt := \{Pierre\ Smash \mapsto ( 2 \mapsto Oui-Oui)\ \}$ &
 \begin{frame}
 \frametitle{Les machines abstraites}
 \framesubtitle{Un exemple}
-\indent retourner(\emph{aa}, \emph{ll}) $\doteq$
+\indent retourner(\emph{aa}, \emph{ll}) $\Bequal$
 \begin{longtable}{lll}
 \textbf{PRE} \tabularnewline
 ~~~~ \emph{aa} $\in$ abonne & $\wedge$ \tabularnewline 
@@ -367,7 +407,7 @@ $emprunt := \{Pierre\ Smash \mapsto ( 2 \mapsto Oui-Oui)\ \}$ &
 ~~~~ $\exists$ \emph{nn}.\ (\emph{nn} $\in$ N1 $\wedge$ \emph{ll} $\mapsto$ \emph{nn} $\in$ exemplaire $\wedge$ (\emph{ll} $\mapsto$ \emph{nn}) $\mapsto$ \emph{aa} $\in$ emprunt )\tabularnewline
 \textbf{THEN} \tabularnewline
 ~~~~ \textbf{ANY} \emph{nn} \textbf{WHERE} \tabularnewline
-~~~~ ~~~~ \emph{nn} $\in$ N1 $\wedge$ $\mapsto$ \emph{nn} $\in$ exemplaire & $\wedge$ \tabularnewline
+~~~~ ~~~~ \emph{nn} $\in$ N1 $\wedge~ll \mapsto$ \emph{nn} $\in$ exemplaire & $\wedge$ \tabularnewline
 ~~~~ ~~~~ (\emph{ll} $\mapsto$ \emph{nn}) $\mapsto$ \emph{aa} $\in$ emprunt \tabularnewline
 ~~~~ \textbf{THEN} \tabularnewline
 ~~~~ ~~~~ emprunt := emprunt -- \{(\emph{ll} $\mapsto$ \emph{nn}) $\mapsto$ \emph{aa})\} \tabularnewline
@@ -380,23 +420,16 @@ $emprunt := \{Pierre\ Smash \mapsto ( 2 \mapsto Oui-Oui)\ \}$ &
 \frametitle{Le raffinement de machines}
 \framesubtitle{Les bases}
 Le raffinement est le fait de transformer une spécification abstraite en un texte plus proche de la programmation, pour finalement obtenir un programme.
-
+\pause
 En pratique il s'agit de :
 \begin{itemize}
-\pause
-\item Reformulation en fonction du changement d’état
-\pause
-\item Affaiblissement des préconditions
-\pause
-\item Concrétisation du typage
-\pause
-\item Réduction du non-déterminisme
+\item Reformuler en fonction du changement d'état
+\item Affaiblir des préconditions
+\item Concrétiser les ensembles
+\item Réduire le non-déterminisme
 \end{itemize}
-\pause
-Tout en gardant bien sûr les invariants au long des opérations. Or on a modifié les opérations, en les remplaçant par des raffinements : ainsi, il faut que les invariants et les éventuelles préconditions impliquent la plus petite précondition des nouvelles substitiutions, telles qu'à la fin les invariants soient encore vérifiés.
 \end{frame}
 
-\subsection{Le raffinement de machines}
 \begin{frame}
 \frametitle{Le raffinement de machines}
 \framesubtitle{Les bases}
@@ -406,17 +439,39 @@ Tout en gardant bien sûr les invariants au long des opérations. Or on a modifi
 \end{figure}
 \end{frame}
 
+\subsection{L'implémentation}
+\begin{frame}
+\frametitle{Implémentations}
+Le langage $B_0$ est un sous langage de la méthode B qui est directement traduisible en un programme (en ADA, C, C++, etc.).  Il est ainsi très proche d'un langage séquentiel.
+
+\pause
+
+On impose un certain nombre de restrictions :
+\begin{itemize}
+\item aucune précondition
+\pause
+\item que des substitutions déterministes ( $:=$, \textsc{IF}, ";" par exemple, mais pas de choix)
+\pause
+\item toutes les constantes et variables sont d'un type concret
+\pause
+\item la terminaison et la correction des boucles doit être prouvée par l'utilisation d'invariants et de variants
+\end{itemize}
+~\\~\\\pause
+La phase finale de la méthode B consiste en la génération de code.
+
+\end{frame}
+
 \begin{frame}
 \frametitle{Le raffinement des machines}
 \framesubtitle{Un exemple simple}
 \noindent \textbf{MACHINE} utils \\
 \textbf{CONSTANTS} $t,n$ \\
 \textbf{OPERATIONS} \\
-$res \leftarrow mini(x, y) \doteq$ \\
+$res \leftarrow mini(x, y) \Bequal$ \\
 \hspace*{1em}  \textbf{PRE} $x \in \mathbb{N} \wedge  y \in \mathbb{N} $ \textbf{THEN} \\
 \hspace*{2em} res := min(\{x, y\})  \\
 \hspace*{1em} \textbf{END} \\
-$res \leftarrow maxi(x, y, z) \doteq$ \\
+$res \leftarrow maxi(x, y, z) \Bequal$ \\
 \hspace*{1em}  \textbf{PRE} $x \in \mathbb{N} \wedge  y \in \mathbb{N} \wedge z \in \mathbb{N}$ \textbf{THEN} \\
 \hspace*{2em} res := max(\{x, y, z\})  \\
 \hspace*{1em} \textbf{END} \\
@@ -455,34 +510,12 @@ $res \leftarrow maxi ( xx , yy , zz ) = $ \\
 \textbf{END}
 \end{frame}
 
-\subsection{L'implémentation}
-\begin{frame}
-\frametitle{Implémentations}
-Le langage $B_0$ est un sous langage de la méthode B qui est directement traduisible en un programme (en ADA, C, C++, etc.).  Il est ainsi très proche d'un langage séquentiel.
-
-\pause
-
-On impose un certain nombre de restrictions :
-\begin{itemize}
-\item aucune précondition
-\pause
-\item que des substitutions déterministes ( $:=$, \textsc{IF}, ";" par exemple, mais de choix)
-\pause
-\item toutes les constantes et variables sont d'un type concret
-\pause
-\item la terminaison et la correction des boucles doit être prouvée par l'utilisation d'invariants et de variants
-\end{itemize}
-~\\~\\\pause
-La phase finale de la méthode B consiste en la génération de code prouvé.
-
-\end{frame}
-
 \begin{frame}
 \frametitle{La méthode B}
 \framesubtitle{Cycle de développement formel vs cycle conventionnel}
 \begin{figure}[h]
 \centering
-\includegraphics[scale=0.33]{ressources/formal_dev.png}
+\includegraphics[scale=0.22]{ressources/formal_dev.png}
 \end{figure}
 \end{frame}
 
@@ -581,7 +614,16 @@ composants)
 
 \begin{frame}
 \frametitle{La méthode B événementielle}
-\framesubtitle Pour aller plus loin
+\framesubtitle{Pour aller plus loin}
+\begin{itemize}
+\item Une machine en B  événementiel, n'a pas des opérations qui seront appelées par d'autres opérations, mais des  événements.
+\item Un  événement est spécifié comme une opération gardée.
+\end{itemize}
+
 \end{frame}
 
+\begin{frame}
+\frametitle{Des questions ?}
+
+\end{frame}
 \end{document}
