@@ -366,7 +366,7 @@ On peut dans cette bilbiothèque créer des livres ou des exemplaires de livres,
 
 \subsubsection{La machine abstraite, partie statique}
 
-Voici les clauses rédigée en B (ici avec des symboles mathématiques, voir annexe (TODO : ref) pour la syntaxe en caractères ASCII).
+Voici les clauses rédigée en B (ici avec des symboles mathématiques, au lieu des charactères ASCII qui les réprésente en réalité \cite[p. 29]{introB}).
 \\
 \\
 \\
@@ -903,12 +903,11 @@ Pour se faire, il faut et il suffit qu'il existe une relation $<$ bien fondée (
 \section{Compléments syntaxiques du langage B}
 \label{ComplementSyntaxique}
 \subsection{Autres clauses des machines abstraites}
-
-\textbf{ASSERTIONS} : Propriété logique dérivée des invariants, contraintes et propriétés. Étant dérivées, i.e. induites par le reste, il n'est pas nécessaire de les démontrer - et même, elles n'impliquent a priori pas réciproquement le reste. En revanche, elles facilitent le travail du prouveur automatique.
-
-\textbf{DEFINITIONS} : Alias facilitant la rédaction du reste de la machine.
-
-TODO : $ABSTRACT\_CONSTANTS$, $CONCRETE\_VARIABLES$
+~\\\noindent\textbf{ASSERTIONS} : Propriétés logiques dérivées des invariants, contraintes et propriétés. Étant dérivées, i.e. induites par le reste, il n'est pas nécessaire de les démontrer (mais ). En revanche, elles facilitent le travail du prouveur automatique. Dans un projet industriel où l'on se fixe un minimum d'obligations de preuves à prouver automatiquement, ces assertions permettent de se rapprocher de ce minimum (cf le travail sur Météor \cite{behm1999meteor}).
+\\~\\\noindent\textbf{DEFINITIONS} : Alias facilitant la rédaction du reste de la machine. Semblables aux macros du C. Possibilité d'inclure des fichiers de définitions externes.
+\\~\\\noindent\textbf{ABSTRACT\_CONSTANTS} : Constantes pouvant être raffinées (à la différence des CONSTANTS, directement implémentables). Peuvent nénanmoins, comme les CONSTANTS, être concernées et restreintes par des assertions de la clause PORPERTIES.
+\\~\\\noindent\textbf{CONCRETE\_VARIABLES} : Variables ne pouvant plus être raffinées, et donc déjà implémentables. Elles reçoivent par conséquent le même traitement que les CONSTANTS.
+\\~\\\noindent\textbf{VISIBLE\_VARIABLES} : Variables d'une machine M pouvant être utilisée par une machine M' important la machine M.
 
 \subsection{Autres éléments d'opérations}
 
