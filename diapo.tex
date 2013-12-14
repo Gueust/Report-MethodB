@@ -1,4 +1,4 @@
-\documentclass[11pt,a4paper,xcolor=table, handout]{beamer} % ,handout: for printing
+\documentclass[11pt,a4paper,xcolor=table]{beamer} % ,handout: for printing
 \usepackage{etex}
 %\documentclass[handout]{beamer}
 
@@ -395,7 +395,7 @@ $emprunt := \{( Oui-Oui \mapsto 2)  \mapsto Pierre\ Smash \}$ &
 ~~~~ \emph{aa} $\in$ abonne & $\wedge$ \tabularnewline 
 ~~~~ \emph{ll} $\in$ livre & $\wedge$ \tabularnewline
 ~~~~ $\exists$ \emph{nn}.\ (\emph{nn} $\in$ N1 $\wedge$ \emph{ll} $\mapsto$ \emph{nn} $\in$ exemplaire $\wedge$ \emph{ll} $\mapsto$ \emph{nn} $\notin$ dom(emprunt)) & $\wedge$ \tabularnewline
-~~~~ \textbf{card}(emprunt $^{-1}$[$\{$ab$\}$] $<$ maxi) \tabularnewline
+~~~~ \textbf{card}(emprunt$^{-1} (\{$aa$\})$ $<$ maxi) \tabularnewline
 \textbf{THEN} \tabularnewline ~~~~ emprunt := emprunt $\cup$ \{(\emph{ll} $\mapsto$ \emph{nn}) $\mapsto$ \emph{aa})\} \tabularnewline
 \textbf{END} \tabularnewline
 \end{longtable}
